@@ -9,7 +9,6 @@
 		<artifactId>java-assignments</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<groupId>org.github.sats17</groupId>
 	<artifactId>inheritance-assignments</artifactId>
 	<name>inheritance-assignments</name>
 	<url>https://github.com/sats17</url>

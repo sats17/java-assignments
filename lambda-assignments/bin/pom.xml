@@ -9,6 +9,7 @@
 		<artifactId>java-assignments</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
+	<groupId>org.github.sats17</groupId>
 	<artifactId>lambda-assignments</artifactId>
 	<name>lambda-assignments</name>
 	<url>https://github.com/sats17</url>
