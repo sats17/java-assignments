@@ -7,7 +7,8 @@ import java.util.concurrent.Flow.Subscription;
 import java.util.stream.IntStream;
 
 /**
- * Basic naive approach of reactive streams using publisher and consumer/subscriber
+ * Basic naive approach of reactive streams using publisher and consumer/subscriber.
+ * This example here our publisher using iterator and passing one element to subscriber in onNext method 
  *
  */
 public class BasicExample implements Publisher<Integer> {
