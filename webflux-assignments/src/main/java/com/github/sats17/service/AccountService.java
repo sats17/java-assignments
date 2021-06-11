@@ -17,5 +17,11 @@ public class AccountService {
 	public Mono<Account> getUserById(String id){
 		return accCrudRepo.findById(id);
 	}
+
+	public Mono<Account> ingestUser(Account acc) {
+		Mono<Account> mono = accCrudRepo.save(acc);
+		System.out.println(mono);
+		return mono;
+	}
 	
 }
