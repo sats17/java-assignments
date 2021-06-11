@@ -28,14 +28,22 @@ public class LegacyControllers {
 	
 	@PostMapping("/user")
 	public Mono<Account> ingestUser(@RequestBody Account acc){
-		Mono<Account> mon = accService.ingestUser(acc);
-		System.out.println(mon);
-//		.flatMap(transformer -> {
-//			System.out.println(transformer);
-//			transformer.setValue(11230);
-//			return Mono.just(transformer);
-//		});
-		return mon;
+		// flatmap working as async and will work on worker thread
+		Mono<Account> mon = accService.ingestUser(acc).flatMap(transformer -> {
+			System.out.println("From flatmap, will print second => "+transformer.getValue());
+			
+			transformer.setValue(11230);
+			return Mono.just(transformer);
+		});
+		// Below line printing on main thread, and printing thread sleep to check.
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("From outside, will print first => "+mon);
+		return mon; // After returning we are calling subscribing which is done by webflux itself
 	}
 	
 	
