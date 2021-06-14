@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.sats17.model.Account;
-import com.github.sats17.repository.AccountCrudRepository;
+import com.github.sats17.repository.AccountReactiveRepository;
 
 import reactor.core.publisher.Mono;
 
@@ -12,14 +12,14 @@ import reactor.core.publisher.Mono;
 public class AccountService {
 
 	@Autowired
-	AccountCrudRepository accCrudRepo;
+	AccountReactiveRepository accReactRepo;
 	
 	public Mono<Account> getUserById(String id){
-		return accCrudRepo.findById(id);
+		return accReactRepo.findById(id);
 	}
 
-	public Mono<Account> ingestUser(Account acc) {
-		Mono<Account> mono = accCrudRepo.save(acc);
+	public Mono<Account> ingestUserByReactive(Account acc) {
+		Mono<Account> mono = accReactRepo.save(acc);
 		System.out.println(mono);
 		return mono;
 	}

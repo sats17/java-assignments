@@ -17,21 +17,19 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/legacy")
 public class LegacyControllers {
 
-	
 	@Autowired
 	AccountService accService;
-	
+
 	@GetMapping("/user/{id}")
-	public Mono<Account> getById(@PathVariable String id){
+	public Mono<Account> getById(@PathVariable String id) {
 		return accService.getUserById(id);
 	}
-	
+
 	@PostMapping("/user")
-	public Mono<Account> ingestUser(@RequestBody Account acc){
+	public Mono<Account> ingestUserByReact(@RequestBody Account acc) {
 		// flatmap working as async and will work on worker thread
-		Mono<Account> mon = accService.ingestUser(acc).flatMap(transformer -> {
-			System.out.println("From flatmap, will print second => "+transformer.getValue());
-			
+		Mono<Account> mon = accService.ingestUserByReactive(acc).flatMap(transformer -> {
+			System.out.println("From flatmap, will print second => " + transformer.getValue());
 			transformer.setValue(11230);
 			return Mono.just(transformer);
 		});
@@ -42,10 +40,10 @@ public class LegacyControllers {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("From outside, will print first => "+mon);
+		System.out.println("From outside, will print first => " + mon);
 		return mon; // After returning we are calling subscribing which is done by webflux itself
+		// Subscribe method invoke db method from mono publisher which will call in mongodb(From service)
+		// and invokes flatmap from this transformer
 	}
-	
-	
-	
+
 }
