@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface AccountReactiveRepository extends ReactiveCrudRepository<Account, String> {
 
-	Mono<Account> findAllByValue(String value);
+	Flux<Account> findAllByValue(Integer value);
     Mono<Account> findFirstByOwner(Mono<String> owner);
 	
 }

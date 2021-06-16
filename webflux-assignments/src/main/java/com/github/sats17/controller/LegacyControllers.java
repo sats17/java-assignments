@@ -49,8 +49,10 @@ public class LegacyControllers {
 	}
 
 	@GetMapping("/account")
-	public Flux<Account> getByValue(@RequestHeader(value = "value") String value) {
-		return accService.getAccountsByValue(value);
+	public Flux<Account> getByValue(@RequestHeader(value = "value") Integer value) {
+		Flux<Account> result =  accService.getAccountsByValue(value);
+		System.out.println("After hitting query from controller");
+		return result;
 	}
 	
 }

@@ -27,11 +27,12 @@ public class AccountService {
 		return mono;
 	}
 	
-	public Flux<Account> getAccountsByValue(String value) {
-		// Need to fix this
+	public Flux<Account> getAccountsByValue(Integer value) {
 		System.out.println("Return from value");
-		accReactRepo.findAllByValue(value).subscribe(result -> System.out.println("resilt ="+result));
-		return null;
+		Flux<Account> result = accReactRepo.findAllByValue(value)
+							.doOnNext(test -> System.out.println("result found => "+test.getId()));
+		System.out.println("After hitting query from service");
+		return result;
 	}
 	
 }
