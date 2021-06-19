@@ -1,4 +1,4 @@
-package com.github.sats17.service;
+ package com.github.sats17.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
