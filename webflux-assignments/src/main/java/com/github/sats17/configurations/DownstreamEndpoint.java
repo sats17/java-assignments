@@ -1,6 +1,9 @@
 package com.github.sats17.configurations;
 
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import reactor.core.publisher.Mono;
 
 public class DownstreamEndpoint {
 
@@ -15,6 +18,14 @@ public class DownstreamEndpoint {
 	 */
 	public WebClient getWebClient() {
 		return webClient;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public Mono<ClientResponse> get(String uriPath) {
+		return this.webClient
+				   .get()
+				   .uri(uriBuilder -> uriBuilder.path(uriPath).build())
+				   .exchange();
 	}
 	
 }

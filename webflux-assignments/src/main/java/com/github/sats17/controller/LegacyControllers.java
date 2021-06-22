@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.ClientResponse;
 
 import com.github.sats17.model.Account;
+import com.github.sats17.model.User;
 import com.github.sats17.service.AccountService;
+import com.github.sats17.service.UserService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,6 +27,9 @@ public class LegacyControllers {
 
 	@Autowired
 	AccountService accService;
+	
+	@Autowired
+	UserService userService;
 
 	@GetMapping("/account/{id}")
 	public Mono<Account> getAccountById(@PathVariable String id) {
@@ -52,9 +58,17 @@ public class LegacyControllers {
 	}
 
 	@GetMapping("/account")
-	public Flux<Account> getByValue(@RequestHeader(value = "value") Integer value) {
+	public Flux<Account> getAccountByValue(@RequestHeader(value = "value") Integer value) {
 		Flux<Account> result =  accService.getAccountsByValue(value);
 		System.out.println("After hitting query from controller");
+		return result;
+	}
+	
+	@GetMapping("/users/{id}")
+	public Mono<User> getUserById(@PathVariable String id) {
+		Mono<User> result =  userService.getUserById(id);
+		System.out.println("After hitting query from controller");
+		System.out.println("From controller Mono result "+result);
 		return result;
 	}
 	

@@ -16,7 +16,7 @@ public class EndpointConfig {
 		String host = configProperties.getUsers().get("host");
 		String port = configProperties.getUsers().get("port"); 
 		String protocol = configProperties.getUsers().get("protocol");
-		return new DownstreamEndpoint(WebClient.create(protocol+host+port));
+		return new DownstreamEndpoint(WebClient.create(protocol+"://"+host+":"+port));
 	}
 	
 }
