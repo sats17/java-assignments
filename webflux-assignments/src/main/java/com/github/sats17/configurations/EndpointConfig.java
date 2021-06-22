@@ -13,13 +13,10 @@ public class EndpointConfig {
 
 	@Bean
 	public DownstreamEndpoint userConfig() {
-		System.out.println(configProperties.getTest());
-		System.out.println("Users data "+configProperties.getUserConfig());
-//		String host = configProperties.getUsers().get("host");
-//		String port = configProperties.getUsers().get("port"); 
-//		String protocol = configProperties.getUsers().get("protocol");
-		System.out.println("test");
-		return new DownstreamEndpoint(WebClient.create("test"));
+		String host = configProperties.getUsers().get("host");
+		String port = configProperties.getUsers().get("port"); 
+		String protocol = configProperties.getUsers().get("protocol");
+		return new DownstreamEndpoint(WebClient.create(protocol+host+port));
 	}
 	
 }

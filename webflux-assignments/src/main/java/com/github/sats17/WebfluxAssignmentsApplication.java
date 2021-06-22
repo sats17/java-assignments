@@ -3,8 +3,10 @@ package com.github.sats17;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
+import com.github.sats17.configurations.ConfigProperties;
 import com.github.sats17.model.Account;
 //import com.github.sats17.repository.AccountReactiveRepository;
 import com.github.sats17.repository.AccountReactiveRepository;
@@ -14,6 +16,7 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 @SpringBootApplication
+@EnableConfigurationProperties(ConfigProperties.class)
 public class WebfluxAssignmentsApplication {
 
 	@Autowired
