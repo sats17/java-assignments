@@ -65,8 +65,8 @@ public class LegacyControllers {
 	}
 	
 	@GetMapping("/users/{id}")
-	public Mono<User> getUserById(@PathVariable String id) {
-		Mono<User> result =  userService.getUserById(id);
+	public Flux<Object> getUserById(@PathVariable String id) {
+		Flux<Object> result =  userService.getUserById(id);
 		System.out.println("After hitting query from controller");
 		System.out.println("From controller Mono result "+result);
 		return result;
