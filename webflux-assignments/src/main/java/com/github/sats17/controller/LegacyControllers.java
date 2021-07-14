@@ -2,6 +2,7 @@ package com.github.sats17.controller;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,11 +66,16 @@ public class LegacyControllers {
 	}
 	
 	@GetMapping("/users/{id}")
-	public Flux<Object> getUserById(@PathVariable String id) {
-		Flux<Object> result =  userService.getUserById(id);
+	public Mono<Object> getUserById(@PathVariable String id) {
+		userService.getUserById(id);
 		System.out.println("After hitting query from controller");
-		System.out.println("From controller Mono result "+result);
-		return result;
+		System.out.println("From controller Mono result ");
+		return null;
+	}
+	
+	@PostMapping("/users")
+	public String ingestUsers(@RequestBody List<User> users) {
+		return userService.ingestAndForget(users);
 	}
 	
 }

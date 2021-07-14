@@ -28,4 +28,13 @@ public class DownstreamEndpoint {
 				   .exchange();
 	}
 	
+	@SuppressWarnings("deprecation")
+	public Mono<ClientResponse> post(String uriPath, Object body) {
+		return this.webClient
+				   .post()
+				   .uri(uriBuilder -> uriBuilder.path(uriPath).build())
+				   .bodyValue(body)
+				   .exchange();
+	}
+	
 }

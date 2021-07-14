@@ -63,6 +63,8 @@
           
     
     <module>reactivestreams-assignments</module>
+    
+    <module>webflux-assignments</module>
       
   </modules>
         	
