@@ -1,6 +1,9 @@
 package com.github.sats17.lambda.models;
 
+import java.util.function.Function;
+
 import com.github.sats17.lambda.enums.OrderStatus;
+import com.github.sats17.lambda.interfaces.ArithmaticOperations;
 
 public class Order {
 
@@ -15,6 +18,16 @@ public class Order {
 	 */
 	public long getPrice() {
 		return price;
+	}
+	
+	/**
+	 * Example for lambda interface where user can modified price accordingly
+	 * @param ab
+	 * @return
+	 */
+	public Order modifyPrice(Function<Long, Long> ab) {
+		this.price = ab.apply(this.price);
+		return this;
 	}
 
 	/**
