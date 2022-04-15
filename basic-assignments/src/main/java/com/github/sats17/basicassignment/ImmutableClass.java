@@ -1,4 +1,4 @@
-package com.github.sats17;
+package com.github.sats17.basicassignment;
 
 import java.util.HashMap;
 import java.util.Map;

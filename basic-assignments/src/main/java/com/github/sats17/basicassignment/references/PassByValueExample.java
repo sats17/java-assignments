@@ -1,4 +1,4 @@
-package com.github.sats17.variablesreferences;
+package com.github.sats17.basicassignment.references;
 
 /**
  * In java we have pass by value mechanism, but we can see object values is getting changed that is because current variable holds

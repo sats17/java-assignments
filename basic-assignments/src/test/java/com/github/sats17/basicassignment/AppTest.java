@@ -1,4 +1,4 @@
-package com.github.sats17;
+package com.github.sats17.basicassignment;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

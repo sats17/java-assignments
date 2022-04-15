@@ -133,4 +133,14 @@ public class Car implements Comparable<Car> {
 		return this.make.compareTo(o.make);
 	}
 
+	public static void main(String[] args) {
+		System.out.println("Hello \n hii");
+		byte[] arr = "s".getBytes();
+		for (byte b : arr) {
+			System.out.println(b);
+		}
+		// print bitwise operations
+		System.out.println(Integer.toBinaryString(12));
+	}
+
 }
