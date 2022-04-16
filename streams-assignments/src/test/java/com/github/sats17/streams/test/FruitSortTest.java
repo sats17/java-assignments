@@ -32,7 +32,7 @@ public class FruitSortTest {
 	@Test
 	public void methodTestWithValidInput() {
 		Object[] arr = new Object[]	{f1,f3};
-		assertArrayEquals(arr, FruitSort.sort.apply(data).toArray());
+		assertArrayEquals(arr, FruitSort.sortByCalories.apply(data).toArray());
 		
 		
 	}
