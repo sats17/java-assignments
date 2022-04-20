@@ -1,4 +1,4 @@
-package com.github.sats17.basicassignment;
+package com.github.sats17.basicassignment.designPattern;
 
 /**
  * This is momos plate object
