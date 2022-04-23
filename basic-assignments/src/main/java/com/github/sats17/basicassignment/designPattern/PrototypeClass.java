@@ -1,4 +1,4 @@
-package com.github.sats17.basicassignment;
+package com.github.sats17.basicassignment.designPattern;
 
 import java.util.HashMap;
 import java.util.Map;
