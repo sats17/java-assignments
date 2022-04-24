@@ -5,7 +5,7 @@ package com.github.sats17.basicassignment.solidprinciple.interfacesaggregation;
  * 
  * Contract for Updating the shop data
  */
-public interface ShopWrite {
+public interface ShopWrite extends Factory {
 
     public String addItem();
 

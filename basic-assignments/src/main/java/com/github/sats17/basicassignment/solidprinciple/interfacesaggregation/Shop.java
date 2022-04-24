@@ -21,5 +21,11 @@ public class Shop implements ShopRead, ShopWrite{
     public String getItems() {
         return "We are getting all items";
     }
+
+	@Override
+	public String generateObject() {
+		// TODO Auto-generated method stub
+		return "I will generate object";
+	}
     
 }

@@ -2,7 +2,7 @@ package com.github.sats17.thread.advanced;
 
 /**
  * This class will show dummy example of how can we call two service and wait for each other to complete their response.
- * 
+ * This example uses java Thread basic API. Just for demo purpose.
  * @author Sats17
  *
  */
