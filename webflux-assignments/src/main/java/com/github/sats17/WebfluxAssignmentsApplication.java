@@ -33,7 +33,7 @@ public class WebfluxAssignmentsApplication {
 			Account acc = new Account();
 			acc.setId(String.valueOf(i));
 			acc.setOwner(UUID.randomUUID().toString());
-			acc.setValue(i + 1000);
+			acc.setValue(1000);
 			accCrudRepo.save(acc).subscribe(entity -> System.out.println("Entity has been saved: {}"+ entity));
 		}
 		Account acc = new Account();

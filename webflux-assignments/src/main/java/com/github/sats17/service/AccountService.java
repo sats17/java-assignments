@@ -1,5 +1,7 @@
  package com.github.sats17.service;
 
+import java.time.Duration;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,11 @@ public class AccountService {
 							.doOnNext(test -> System.out.println("result found => "+test.getId()));
 		System.out.println("After hitting query from service");
 		return result;
+	}
+	
+	public Flux<Account> getAccounts() {
+		System.out.println("Return from value");
+		return accReactRepo.findAll().delayElements(Duration.ofMillis(1000));
 	}
 	
 }
