@@ -23,8 +23,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/legacy")
-public class LegacyControllers {
+@RequestMapping("/api/basic")
+public class BasicController {
 
 	@Autowired
 	AccountService accService;

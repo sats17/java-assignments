@@ -29,9 +29,8 @@ public class ReactiveController {
 	
 	@GetMapping("/accounts")
 	public Flux<Account> getAccount() {
-//		return accService.getAccounts()
-//				.doOnNext(test -> System.out.println("result found => "+test.getId()));
-//		System.out.println("Return from value");
+		// Use Accept header as test/event-stream to see the result. Gitbash/postman does not support reactive way, try to use 
+		// other command line
 		return accReactRepo.findAll().delayElements(Duration.ofMillis(1000))
 				.doOnNext(tst -> System.out.println(tst.getId()));
 	}
