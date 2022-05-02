@@ -20,12 +20,13 @@ public class DownstreamEndpoint {
 		return webClient;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public Mono<ClientResponse> get(String uriPath) {
 		return this.webClient
 				   .get()
 				   .uri(uriBuilder -> uriBuilder.path(uriPath).build())
-				   .exchange();
+				   .exchangeToMono(response -> {
+					   return response.bodyToMono(ClientResponse.class);
+				   });
 	}
 	
 	@SuppressWarnings("deprecation")
