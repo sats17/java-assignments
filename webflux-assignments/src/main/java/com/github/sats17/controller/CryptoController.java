@@ -24,15 +24,9 @@ public class CryptoController {
 	CoinService coinService;
 
 	@GetMapping("/price")
-	public Flux<Object> getCurrentPriceOfCoin() {
+	public Flux<String> getCurrentPriceOfCoin() {
 		System.out.println("Getting coin price");
-		return coinService.getCoinValue("razxDUgYGNAdQ").delayElements(Duration.ofMillis(2000)).flatMap(monu -> {
-			System.out.println("I am printing");
-			return monu;
-		});
-//		 Flux<Long> interval = Flux.interval(Duration.ofSeconds(1));
-		 //return 
-//		 return Flux.zip(interval, data);
+		return coinService.getCoinValue("razxDUgYGNAdQ");
 	}
 	
 }
