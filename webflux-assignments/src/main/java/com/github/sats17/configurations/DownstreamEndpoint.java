@@ -1,5 +1,7 @@
 package com.github.sats17.configurations;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -26,6 +28,18 @@ public class DownstreamEndpoint {
 				   .uri(uriBuilder -> uriBuilder.path(uriPath).build())
 				   .exchangeToMono(response -> {
 					   return response.bodyToMono(ClientResponse.class);
+				   });
+	}
+	
+	public Mono<Object> get(String uriPath, MultiValueMap<String, String> headers, MultiValueMap<String, String> queryParams) {
+		return this.webClient
+				   .get()
+				   .uri(uriBuilder -> uriBuilder.path(uriPath).queryParams(queryParams).build())
+				   .headers(headersList -> {
+					   headersList.addAll(headers);
+				   })
+				   .exchangeToMono(response -> {
+					   return response.bodyToMono(String.class);
 				   });
 	}
 	

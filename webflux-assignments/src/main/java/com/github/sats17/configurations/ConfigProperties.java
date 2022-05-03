@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 public class ConfigProperties {
 
 	private Map<String, String> users = new HashMap<>();
+	
+	private Map<String, String> coins = new HashMap<>();
 
 	/**
 	 * @return the users
@@ -26,6 +28,14 @@ public class ConfigProperties {
 	 */
 	public void setUsers(Map<String, String> users) {
 		this.users = users;
+	}
+
+	public Map<String, String> getCoins() {
+		return coins;
+	}
+
+	public void setCoins(Map<String, String> coins) {
+		this.coins = coins;
 	}
 
 }

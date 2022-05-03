@@ -19,4 +19,11 @@ public class EndpointConfig {
 		return new DownstreamEndpoint(WebClient.create(protocol+"://"+host+":"+port));
 	}
 	
+	@Bean
+	public DownstreamEndpoint coinConfig() {
+		String host = configProperties.getCoins().get("host");
+		String protocol = configProperties.getCoins().get("protocol");
+		return new DownstreamEndpoint(WebClient.create(protocol+"://"+host));
+	}
+	
 }
