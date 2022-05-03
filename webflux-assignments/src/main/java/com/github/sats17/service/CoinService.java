@@ -1,5 +1,7 @@
 package com.github.sats17.service;
 
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -9,6 +11,7 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import com.github.sats17.configurations.ConfigProperties;
 import com.github.sats17.configurations.DownstreamEndpoint;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -20,7 +23,7 @@ public class CoinService {
 	@Autowired
 	DownstreamEndpoint coinConfig;
 	
-	public Mono<String> getCoinValue(String coinCode) {
+	public Flux<Mono<String>> getCoinValue(String coinCode) {
 		String apiKey = configProperties.getCoins().get("apikey");
 		long currentTimestamp = System.currentTimeMillis() / 1000l;
 		String uriPath = "/coin/"+coinCode+"/price";
@@ -31,7 +34,12 @@ public class CoinService {
 		System.out.println(headerValues.toString());
 		System.out.println(uriPath);
 		System.out.println(queryParamValues.toString());
-		return coinConfig.get(uriPath, headerValues, queryParamValues).cast(String.class).doOnNext(result -> System.out.println(result));
+		return Flux.fromStream(Stream.generate(() -> {
+			return coinConfig.get(uriPath, headerValues, queryParamValues)
+					.cast(String.class)
+					.doOnSubscribe(onSubscribe -> System.out.println("Subscribed event from service"))
+					.doOnNext(result -> System.out.println(result));
+		}));
 		
 	}
 

@@ -24,13 +24,14 @@ public class CryptoController {
 	CoinService coinService;
 
 	@GetMapping("/price")
-	public Flux<Disposable> getCurrentPriceOfCoin() {
+	public Flux<Object> getCurrentPriceOfCoin() {
 		System.out.println("Getting coin price");
-//		return coinService.getCoinValue("razxDUgYGNAdQ");
+		return coinService.getCoinValue("razxDUgYGNAdQ").delayElements(Duration.ofMillis(2000)).flatMap(monu -> {
+			System.out.println("I am printing");
+			return monu;
+		});
 //		 Flux<Long> interval = Flux.interval(Duration.ofSeconds(1));
-		 return Flux.fromStream(Stream.generate(() -> {
-			 return coinService.getCoinValue("razxDUgYGNAdQ").subscribe();
-		 })).delayElements(Duration.ofMillis(1500));
+		 //return 
 //		 return Flux.zip(interval, data);
 	}
 	
