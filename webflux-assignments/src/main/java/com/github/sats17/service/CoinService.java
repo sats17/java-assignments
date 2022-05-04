@@ -31,32 +31,27 @@ public class CoinService {
 	 * this flatmap we are merging publishers into single publisher. If we don't merge then inner Mono publisher only return his 
 	 * future object and it is not getting auto subscribing by webflux.
 	 * 
-	 * Also, Stream data is getting collected as a eager loading and later on it is getting subscribing after delaying time.
-	 * 
-	 * Current issue = As you can see from loggers, our currentTimeStamp is not dynamically passing. Because we are passing that time
-	 * earlier and stream is eager loading that time kinda looks like fixed.
+	 * Also, Stream data(Webclient streams) is getting collected as a eager loading and later on it is getting subscribing after delaying time.
 	 * @param coinCode
 	 * @return
 	 */
 	public Flux<String> getCoinValue(String coinCode) {
 		String apiKey = configProperties.getCoins().get("apikey");
-		long currentTimestamp = System.currentTimeMillis() / 1000l;
 		String uriPath = "/coin/"+coinCode+"/price";
 		MultiValueMap<String, String> headerValues = new LinkedMultiValueMap<>();
-		MultiValueMap<String, String> queryParamValues = new LinkedMultiValueMap<>();
 		headerValues.add("X-RapidAPI-Key", apiKey);
-		queryParamValues.add("timestamp", String.valueOf(currentTimestamp));
 		
 		return Flux.fromStream(Stream.generate(() -> {
 			System.out.println(Thread.currentThread().getName()+" Flux Stream is started");
-			System.out.println(currentTimestamp);
-			return coinConfig.get(uriPath, headerValues, queryParamValues)
+			return coinConfig.get(uriPath, headerValues, null)
 					.cast(String.class)
-					.doOnSubscribe(onSubscribe -> System.out.println(Thread.currentThread().getName()+" Webclient call to API subscribed from coinService"))
-					.doOnNext(result -> System.out.println(Thread.currentThread().getName()+" Do on next invoked for webclient call = result is = "+result));
-		})).doOnSubscribe(print -> System.out.println(Thread.currentThread().getName()+" Flux Stream is subscribed from coinService"))
-		  .delayElements(Duration.ofMillis(5000))
+					.doOnSubscribe(onSubscribe -> {
+						System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+" Webclient HTTP call to Coin API, subscribed from coinService");
+					})
+					.doOnNext(result -> System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+" Do on next invoked for webclient call = result is = "+result));
+		})).doOnSubscribe(print -> System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+" Flux Stream is subscribed from coinService"))
+		  .delayElements(Duration.ofMillis(4000))
 		  .flatMap(webClientPublisher -> webClientPublisher);	
 	}
-
+	
 }
