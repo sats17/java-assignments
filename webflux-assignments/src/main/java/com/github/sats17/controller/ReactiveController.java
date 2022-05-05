@@ -31,9 +31,28 @@ public class ReactiveController {
 	public Flux<Account> getAccount() {
 		// Use Accept header as test/event-stream to see the result. Gitbash/postman does not support reactive way, try to use 
 		// other command line
-		return accReactRepo.findAll().delayElements(Duration.ofMillis(1000))
+		return accReactRepo.findAll()
 				.doOnNext(tst -> System.out.println(tst.getId()));
 	}
 	
-
+	@SuppressWarnings("deprecation")
+	@GetMapping("/customsub")
+	public String getAccountTest() {
+		// Use Accept header as test/event-stream to see the result. Gitbash/postman does not support reactive way, try to use 
+		// other command line
+		Flux<Account> publisher = accReactRepo.findAll().log();
+		publisher.subscribe(
+			      System.out::println,
+			      err -> err.printStackTrace(),
+			      () -> System.out.println("All 50 items have been successfully processed!!!"),
+			      subscription -> {
+			          for (int i = 0; i < 5; i++) {
+			              System.out.println("Requesting the next 10 elements!!!");
+			              subscription.request(1);
+			          }
+			      }
+			    );
+		return "Test";
+	}
+	
 }
