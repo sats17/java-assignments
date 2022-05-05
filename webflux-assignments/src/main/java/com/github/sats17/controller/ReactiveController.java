@@ -40,15 +40,15 @@ public class ReactiveController {
 	public String getAccountTest() {
 		// Use Accept header as test/event-stream to see the result. Gitbash/postman does not support reactive way, try to use 
 		// other command line
-		Flux<Account> publisher = accReactRepo.findAll().log();
+		Flux<Account> publisher = accReactRepo.findAll().log().doOnNext(test -> System.out.println(test));
 		publisher.subscribe(
 			      System.out::println,
 			      err -> err.printStackTrace(),
-			      () -> System.out.println("All 50 items have been successfully processed!!!"),
+			      () -> System.out.println("All items have been successfully processed!!!"),
 			      subscription -> {
-			          for (int i = 0; i < 5; i++) {
-			              System.out.println("Requesting the next 10 elements!!!");
-			              subscription.request(1);
+			          for (int i = 0; i < 1; i++) {
+			              System.out.println("Requesting the next 20 elements!!!");
+			              subscription.request(20);
 			          }
 			      }
 			    );
