@@ -40,18 +40,21 @@ public class CoinService {
 		String uriPath = "/coin/"+coinCode+"/price";
 		MultiValueMap<String, String> headerValues = new LinkedMultiValueMap<>();
 		headerValues.add("X-RapidAPI-Key", apiKey);
-		
 		return Flux.fromStream(Stream.generate(() -> {
 			System.out.println(Thread.currentThread().getName()+" Flux Stream is started");
 			return coinConfig.get(uriPath, headerValues, null)
 					.cast(String.class)
 					.doOnSubscribe(onSubscribe -> {
-						System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+" Webclient HTTP call to Coin API, subscribed from coinService");
+						System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+" On subscribe invoked for WebClient call");
 					})
-					.doOnNext(result -> System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+" Do on next invoked for webclient call = result is = "+result));
-		})).doOnSubscribe(print -> System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+" Flux Stream is subscribed from coinService"))
-		  .delayElements(Duration.ofMillis(4000))
-		  .flatMap(webClientPublisher -> webClientPublisher);	
+//					.delayElement(Duration.ofMillis(2000))
+					.doOnNext(result -> System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+" On subscribe invoked for WebClient call = result is = "+result));
+		})).doOnSubscribe(print -> System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+" On subscribe invoked for stream"))	  
+		  .doOnRequest(consumer -> System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+"On request invoked for stream"))	  
+		  .delaySequence(Duration.ofMillis(4000))
+		  .doOnNext(onNext -> System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+"On Next invoked for stream"))
+		  .flatMap(webClientPublisher -> webClientPublisher)
+		  ;
 	}
 	
 }
