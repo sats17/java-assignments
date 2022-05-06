@@ -1,5 +1,6 @@
 package com.github.sats17.service;
 
+import java.awt.PageAttributes.MediaType;
 import java.time.Duration;
 import java.util.stream.Stream;
 
@@ -41,20 +42,17 @@ public class CoinService {
 		MultiValueMap<String, String> headerValues = new LinkedMultiValueMap<>();
 		headerValues.add("X-RapidAPI-Key", apiKey);
 		return Flux.fromStream(Stream.generate(() -> {
-			System.out.println(Thread.currentThread().getName()+" Flux Stream is started");
 			return coinConfig.get(uriPath, headerValues, null)
 					.cast(String.class)
 					.doOnSubscribe(onSubscribe -> {
 						System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+" On subscribe invoked for WebClient call");
 					})
-//					.delayElement(Duration.ofMillis(2000))
 					.doOnNext(result -> System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+" On subscribe invoked for WebClient call = result is = "+result));
 		})).doOnSubscribe(print -> System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+" On subscribe invoked for stream"))	  
 		  .doOnRequest(consumer -> System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+"On request invoked for stream"))	  
-		  .delaySequence(Duration.ofMillis(4000))
+		  .delayElements(Duration.ofMillis(4000)) // Used as a backpressure for clients. So client does not get overwhelmed
 		  .doOnNext(onNext -> System.out.println(String.valueOf(System.currentTimeMillis() / 1000l)+" :: "+Thread.currentThread().getName()+" :: "+"On Next invoked for stream"))
-		  .flatMap(webClientPublisher -> webClientPublisher)
-		  ;
+		  .flatMap(webClientPublisher -> webClientPublisher);
 	}
 	
 }
