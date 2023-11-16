@@ -35,11 +35,13 @@ public class ReactiveController {
 				.doOnNext(tst -> System.out.println(tst.getId()));
 	}
 	
+	/**
+	 * Method shows how you can work with custom subscriber 
+	 * @return
+	 */
 	@SuppressWarnings("deprecation")
-	@GetMapping("/customsub")
+	@GetMapping("/customsubscriber")
 	public String getAccountTest() {
-		// Use Accept header as test/event-stream to see the result. Gitbash/postman does not support reactive way, try to use 
-		// other command line
 		Flux<Account> publisher = accReactRepo.findAll().log().doOnNext(test -> System.out.println(test));
 		publisher.subscribe(
 			      System.out::println,
