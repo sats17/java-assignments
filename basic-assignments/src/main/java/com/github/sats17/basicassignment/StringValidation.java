@@ -1,4 +1,4 @@
-package com.github.sats17.basicassignment.references;
+package com.github.sats17.basicassignment;
 
 import java.util.ArrayList;
 import java.util.List;
