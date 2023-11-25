@@ -1,5 +1,7 @@
 package com.github.sats17.problems.assignments;
 
+import java.util.List;
+
 /**
  * You are given two non-empty linked lists representing two non-negative
  * integers. The digits are stored in reverse order, and each of their nodes
@@ -46,14 +48,20 @@ public class AddTwoNumberLinkedList {
 	}
 
 	public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-		int l1Int = reverseInt(traverseNodeAndGetVal(l1));
-		int l2Int = reverseInt(traverseNodeAndGetVal(l2));
-		int finalVal = l1Int + l2Int;
+		long l1Int = traverseNodeAndGetVal(l1);
+		long l1IntReverse = reverseInt(l1Int);
+		long l2Int = traverseNodeAndGetVal(l2);
+		long l2IntReverse = reverseInt(l2Int);
+		System.out.println("L1 int "+l1Int);
+		System.out.println("L2 int "+l2Int);
+		System.out.println("L1 int reverse "+l1IntReverse);
+		System.out.println("L2 int reverse "+l2IntReverse);
+		long finalVal = l1Int + l2Int;
 		System.out.println("Final vla " + finalVal);
 		return generateNodeByRecursion(finalVal, false);
 	}
 
-	public static ListNode generateNodeByRecursion(int value, boolean isCallingFromRecursion) {
+	public static ListNode generateNodeByRecursion(long value, boolean isCallingFromRecursion) {
 		if (value == 0 && !isCallingFromRecursion) {
 			AddTwoNumberLinkedList list = new AddTwoNumberLinkedList();
 			return list.new ListNode(0);
@@ -61,47 +69,32 @@ public class AddTwoNumberLinkedList {
 			return null;
 		} else {
 			System.out.println("Value " + value);
-			int nodeVal = value % 10;
-			int slicedVal = value / 10;
+			long nodeVal = value % 10;
+			long slicedVal = value / 10;
 			System.out.println("Node val " + nodeVal);
 			System.out.println("Sliced value " + slicedVal);
 
 			AddTwoNumberLinkedList list = new AddTwoNumberLinkedList();
 			ListNode recursedNode = generateNodeByRecursion(slicedVal, true);
-			ListNode listNode = list.new ListNode(nodeVal, recursedNode);
+			ListNode listNode = list.new ListNode((int)nodeVal, recursedNode);
 			return listNode;
 		}
 	}
 
-	public static int traverseNodeAndGetVal(ListNode node) {
-		int num = 0;
+	public static long traverseNodeAndGetVal(ListNode node) {
+		String num = "";
 		while (node != null) {
-			num = num * 10 + node.val;
+			System.out.println(node.val);
+			num = node.val + num;
 			node = node.next;
 		}
-
-		return num;
+		System.out.println(num);
+		return (int) Long.parseLong(num);
 	}
 
-	public static ListNode generateNode1() {
-		AddTwoNumberLinkedList list = new AddTwoNumberLinkedList();
-		ListNode listNode4 = list.new ListNode(0);
-//		ListNode listNode2 = new AddTwoNumberLinkedList().new ListNode(4, listNode4);
-//		ListNode listNode1 = new AddTwoNumberLinkedList().new ListNode(2, listNode2);
-
-		return listNode4;
-	}
-
-	public static ListNode generateNode2() {
-		AddTwoNumberLinkedList list = new AddTwoNumberLinkedList();
-		ListNode listNode5 = list.new ListNode(0);
-//		ListNode listNode3 = new AddTwoNumberLinkedList().new ListNode(6, listNode5);
-//		ListNode listNode9 = new AddTwoNumberLinkedList().new ListNode(5, listNode3);
-		return listNode5;
-	}
-
-	public static int reverseInt(int val) {
-		int ans = 0;
+	// Not using
+	public static long reverseInt(long val) {
+		long ans = 0;
 		while (val > 0) {
 			ans = ans * 10 + val % 10;
 			val = val / 10;
@@ -109,10 +102,31 @@ public class AddTwoNumberLinkedList {
 		return ans;
 	}
 
+	// Util class
+	public static ListNode convertListToNodeList(List<Integer> list) {
+		AddTwoNumberLinkedList linkedListClass = new AddTwoNumberLinkedList();
+		if (list == null || list.isEmpty()) {
+			return null;
+		}
+
+		ListNode dummyHead = linkedListClass.new ListNode();
+		ListNode current = dummyHead;
+
+		for (Integer value : list) {
+			current.next = linkedListClass.new ListNode(value);
+			current = current.next;
+		}
+
+		return dummyHead.next;
+	}
+
 	public static void main(String[] args) {
+		ListNode l1 = convertListToNodeList(List.of(9));
+		ListNode l2 = convertListToNodeList(List.of(1,9,9,9,9,9,9,9,9,9));
+		System.out.println(l1.toString());
 		AddTwoNumberLinkedList list = new AddTwoNumberLinkedList();
-		System.out.println(list.addTwoNumbers(generateNode1(), generateNode2()));
-		System.out.println(8 % 10);
+		System.out.println(list.addTwoNumbers(l1, l2));
+		System.out.println(reverseInt(012));
 	}
 
 }
