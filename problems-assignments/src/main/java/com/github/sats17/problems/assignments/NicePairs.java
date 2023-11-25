@@ -43,6 +43,7 @@ public class NicePairs {
 			for (int j = i + 1; j < nums.length; j++) {
 				if(nums[i] + reverseInt(nums[j]) == reverseInt(nums[i]) + nums[j]) {
 					System.out.println(nums[i] - reverseInt(nums[i]));
+					System.out.println(nums[j] - reverseInt(nums[j]));
 					System.out.println("Nice numbers = "+i+", "+j);
 					total = total + 1;
 				}
@@ -55,17 +56,18 @@ public class NicePairs {
 		int total = 0;
 		Map<Integer, Integer> ans = new HashMap<>();
 		for (int i = 0; i < nums.length; i++) {
-			System.out.println(nums[i] - reverseInt(nums[i]));
-			System.out.println(nums[i]);
 			int key = nums[i] - reverseInt(nums[i]);
 			ans.put(key, ans.getOrDefault(key, 0) + 1);
 		}
 		System.out.println(ans);
 		for (Integer value : ans.values()) {
-			System.out.println(value);
-		    if(value > 1) total = total + value;
+		    if(value > 1) total = total + calculateCombination(value);
 		}
 		return total;
+	}
+	
+	public static int calculateCombination(int count) {
+		return count * (count - 1) / 2;
 	}
 	
 	public static int reverseInt(int val) {
