@@ -82,6 +82,7 @@ public class NicePairs {
 	// Fix below question, where 9 is coming as 2 times, instead of 1
 	public static void main(String[] args) {
 		int[] arr = {13,10,35,24,76};
+		
 		System.out.println(countNicePairsBruteforce(arr));
 		System.out.println("-----------------------------");
 		System.out.println(countNicePairsWithFormula(arr));
