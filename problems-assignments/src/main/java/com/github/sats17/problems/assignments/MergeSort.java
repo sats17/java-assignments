@@ -1,3 +1,4 @@
+package com.github.sats17.problems.assignments;
 
 import java.util.ArrayList;
 import java.util.Arrays;
