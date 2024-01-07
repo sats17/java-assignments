@@ -4,34 +4,43 @@ import java.util.Arrays;
 
 public class RotateArray {
 
+	/**
+	 * Time complexity = O(n), where n is size of array.
+	 * Space complexity = O(n * 2) where n is size of array
+	 * @param arr
+	 * @param rotateSteps
+	 */
 	public void simpleRotate(int[] arr, int rotateSteps) {
+		
 		int arrSize = arr.length;
-		System.out.println(arrSize);
 		int rotateStartIndex = arrSize - rotateSteps;
-		System.out.println(rotateStartIndex);
-		int i = 0;
+		int newArrIndex = 0;
 		int rotateStartIndexLoop = rotateStartIndex;
 		int[] myIntArray = new int[arrSize];
-		while(i < rotateSteps) {
-			myIntArray[i] = arr[rotateStartIndexLoop];
-			i++;
+		// Start filling values to array those we want to rotate
+		while (newArrIndex < rotateSteps) {
+			myIntArray[newArrIndex] = arr[rotateStartIndexLoop];
+			newArrIndex++;
 			rotateStartIndexLoop++;
 		}
-		System.out.println("Rotate index loop "+rotateStartIndexLoop);
-		int j = 0;
-		while (j < rotateStartIndex) {
-			System.out.println(arr[j]);
-			myIntArray[i] = arr[j];
-			i++;
-			j++;
+		
+		// Fill remaining values to array. Remaining values are the start one.
+		int oldArrStartIndex = 0;
+		while (oldArrStartIndex < rotateStartIndex) {
+			System.out.println(arr[oldArrStartIndex]);
+			myIntArray[newArrIndex] = arr[oldArrStartIndex];
+			newArrIndex++;
+			oldArrStartIndex++;
 		}
-		for(int k= 0; k < myIntArray.length; k++) {
-			System.out.println("Rotate value "+ myIntArray[k]);
+		
+		// Print new array
+		for (int k = 0; k < myIntArray.length; k++) {
+			System.out.println("Rotate value " + myIntArray[k]);
 		}
 	}
 
 	public static void main(String[] args) {
-		int[] arr = new int[] {2, 3, 4,5,6,7,8,9};
+		int[] arr = new int[] { 2, 3, 4, 5, 6, 7, 8, 9 };
 		RotateArray ra = new RotateArray();
 		ra.simpleRotate(arr, 7);
 	}
