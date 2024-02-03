@@ -14,7 +14,7 @@ public class PalindromeTest {
 	 */
 	@Test
 	public void testPalindromeForValidNumber() throws ValueOutOfRangeException {
-		assertEquals(true, PalindromeImpl.check(121));
+		assertEquals(true, PalindromeImpl.isIntegerPalindrome(121));
 	}
 	
 	/*
@@ -22,7 +22,7 @@ public class PalindromeTest {
 	 */
 	@Test
 	public void testPalindromeForNegativeNumber() throws ValueOutOfRangeException {
-		assertEquals(false, PalindromeImpl.check(-121));
+		assertEquals(false, PalindromeImpl.isIntegerPalindrome(-121));
 	}
 	
 	/*
@@ -30,7 +30,7 @@ public class PalindromeTest {
 	 */
 	@Test
 	public void testPalindromeForInValidNumber() throws ValueOutOfRangeException {
-		assertEquals(false, PalindromeImpl.check(10));
+		assertEquals(false, PalindromeImpl.isIntegerPalindrome(10));
 	}
 	
 	

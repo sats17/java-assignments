@@ -20,7 +20,7 @@ public class SortPalindromeImpl {
 
 		for (int i = 0; i < array.length; i++) {
 			// Here we verify number is palindrome or not.
-			if (PalindromeImpl.check(array[i])) {
+			if (PalindromeImpl.isIntegerPalindrome(array[i])) {
 
 				int tempVal = array[i];
 				ArrayList<Integer> tempArr = new ArrayList<Integer>();
