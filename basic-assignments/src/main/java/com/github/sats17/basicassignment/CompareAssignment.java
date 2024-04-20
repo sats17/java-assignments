@@ -9,6 +9,7 @@ import com.github.sats17.streams.model.Fruit;
 
 /*
  * In this assignment we checked how comparator functional interface used with Collections.sort.
+  To check comparator custom example refer -> https://github.com/sats17/java-assignments/blob/main/problems-assignments/src/main/java/com/github/sats17/problems/assignments/MergeSort.java
  */
 public class CompareAssignment {
 
