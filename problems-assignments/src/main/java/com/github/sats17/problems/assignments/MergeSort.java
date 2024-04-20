@@ -29,6 +29,14 @@ public class MergeSort<T> {
 
 	}
 
+	/**
+	 * We compared values against arrays, if list1[i] value is less than list2[j] then i++ and finalList.append[i]. 
+	 * We know that both arrays were sorted, hence left out items from either array we will just push blindly to final array.  
+	 * @param list1
+	 * @param list2
+	 * @param fun
+	 * @return
+	 */
 	public List<T> sortAndMergeList(List<T> list1, List<T> list2, Comparator<T> fun) {
 
 		List<T> mergedList = new ArrayList<>();
