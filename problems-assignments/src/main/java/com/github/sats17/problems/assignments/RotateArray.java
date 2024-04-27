@@ -2,6 +2,10 @@ package com.github.sats17.problems.assignments;
 
 public class RotateArray {
 
+	/**
+	 * 
+	 * Start replacing start index and end index, till your pointer comes to center.
+	 */
 	public int[] reverse(int[] arr, int startIndex, int endIndex) {
 		if (endIndex - startIndex == 1) {
 			int startIndexVal = arr[startIndex];
@@ -60,16 +64,21 @@ public class RotateArray {
 		}
 	}
 	
+	/**
+	 * Based on the rotate steps, calculate median by arrsize - step. 
+	 * Reseverse the first half of array. then reverse second half of arry.
+	 * then reverse all array. Rotation is done.
+	 */
 	public void optimizedRotate(int[] arr, int rotateSteps) {
 
 		int arrSize = arr.length - 1;
 		int medianIndex = (arrSize - rotateSteps);
-		int[] reversedArr = reverse(arr, 0, medianIndex );
-		int[] reverseArr2 = reverse(reversedArr, medianIndex + 1, arrSize);
-		int[] finalRotatedArr = reverse(reverseArr2, 0, arrSize);
+		arr = reverse(arr, 0, medianIndex );
+		arr = reverse(arr, medianIndex + 1, arrSize);
+		arr = reverse(arr, 0, arrSize);
 		// Print new array
-		for (int k = 0; k < finalRotatedArr.length; k++) {
-			System.out.println("Rotate value " + finalRotatedArr[k]);
+		for (int k = 0; k < arr.length; k++) {
+			System.out.println("Rotate value " + arr[k]);
 		}
 	}
 
