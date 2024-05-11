@@ -1,6 +1,7 @@
 package com.github.sats17.basicassignment;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class StringValidation {
@@ -26,6 +27,15 @@ public class StringValidation {
 		String[] strings = {"llo","he","om","ll","h"};
 		String input = "hheheheh";
 		System.out.println(valiateString(strings, input));
+		StringBuilder tempString = new StringBuilder();
+		for(int i = 0; i < 100; i++) {
+			tempString.append(String.valueOf(i));
+		}
+		
+		
+		
+		
+		
 //		List<String> test = new ArrayList<>();
 //		test.add("Test");
 //		test.add("Sats");

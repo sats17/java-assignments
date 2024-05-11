@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  */
 public class LazyInitialize {
 
-	public void LazyInitializeExample() {
+	public static void LazyInitializeExample() {
 		List<String> list = new ArrayList<>();
 		list.add("First");
 		list.add("Second");
@@ -27,9 +27,16 @@ public class LazyInitialize {
 									System.out.println("filter: "+name); // this will print once terminal operation executes 
 									return true;
 								});
+		ab = ab.map(val -> {
+			val = val + "-Mapped";
+			System.out.println("Map - "+val);
+			return val;
+		});
 		System.out.println("This will print first");  // This will print first because there is no terminal operation declare in ab stream
 		ab.forEach(s -> System.out.println("forEach: " + s)); // This will initialize stream
 	}
 	
-	
+	public static void main(String[] args) {
+		LazyInitializeExample();
+	}
 }

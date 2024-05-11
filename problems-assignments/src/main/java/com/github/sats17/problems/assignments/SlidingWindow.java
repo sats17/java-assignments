@@ -2,19 +2,15 @@ package com.github.sats17.problems.assignments;
 
 public class SlidingWindow {
 
-    public static int predictStockProfit(int[] nums) {
-    	int maxProfit = 0;
-    	int estimatedBuy = nums[0];
-        for (int i = 0; i < nums.length; i++) {
-        	if(nums[i] < estimatedBuy) {
-        		estimatedBuy = nums[i];
-        	} else {
-        		int currentProfit = nums[i] - estimatedBuy;
-        		if(maxProfit < currentProfit) {
-        			maxProfit = currentProfit;
-        		}
+    public static int predictStockProfit(int[] prices) {
+        int maxProfit = 0;
+    	int estimatedBuy = prices[0];
+        for (int i = 1; i < prices.length; i++) {
+        	if(prices[i] < estimatedBuy) {
+        		estimatedBuy = prices[i];
+        	} else if(prices[i] - estimatedBuy > maxProfit ) {
+        			maxProfit = prices[i] - estimatedBuy;
         	}
-        	
         }
         return maxProfit;
     }
