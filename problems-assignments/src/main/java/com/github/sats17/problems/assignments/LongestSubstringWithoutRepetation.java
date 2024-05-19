@@ -87,10 +87,10 @@ public class LongestSubstringWithoutRepetation {
 	 * longestSubstring.
 	 *
 	 * The problem here is that we are not removing all previous values from the
-	 * duplicate element index, which cause first pointer to iterate n times.
+	 * duplicate element index, which cause first pointer to iterate n times till duplicate element and with that we are removing those.
 	 * Improvement can be if we found the element as duplicate in map then remove that
 	 * duplicate element and mark duplicate element index + 1 as first pointer. Also remove all previous values present in hashmap 
-	 * which are previous to duplicate element from map.
+	 * which are previous to duplicate element from map. (These is hardest part to do)
 	 * 
 	 * 
 	 */
