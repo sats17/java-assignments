@@ -13,7 +13,15 @@ public class LinkedList<E> {
 	public Node<E> getTail() {
 		return tail;
 	}
-	
+
+	public void setHead(Node<E> head) {
+		this.head = head;
+	}
+
+	public void setTail(Node<E> tail) {
+		this.tail = tail;
+	}
+
 	public void add(E value) {
 		if (this.head == null) {
 			this.head = new Node<E>(value, null);
@@ -21,7 +29,7 @@ public class LinkedList<E> {
 			this.length++;
 		} else {
 			Node<E> currentNode = this.head;
-			while(currentNode.getNext() != null) {
+			while (currentNode.getNext() != null) {
 				currentNode = currentNode.getNext();
 			}
 			currentNode.setNext(new Node<E>(value, null));
@@ -29,23 +37,21 @@ public class LinkedList<E> {
 			this.length++;
 		}
 	}
-	
+
 	public Integer length() {
 		return this.length;
 	}
-	
+
 	public void print() {
 		Node<E> currentNode = this.head;
-		while(currentNode.getNext() != null) {
+		while (currentNode.getNext() != null) {
 			System.out.println(currentNode.getValue());
 			currentNode = currentNode.getNext();
 		}
 		System.out.println(currentNode.getValue());
 	}
-	
-	public static void main(String[] args) {
-		
 
+	public static void main(String[] args) {
 
 	}
 
