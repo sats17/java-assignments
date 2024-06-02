@@ -17,6 +17,7 @@ public class LinkedList<E> {
 	public void add(E value) {
 		if (this.head == null) {
 			this.head = new Node<E>(value, null);
+			this.tail = this.head;
 			this.length++;
 		} else {
 			Node<E> currentNode = this.head;
@@ -24,6 +25,7 @@ public class LinkedList<E> {
 				currentNode = currentNode.getNext();
 			}
 			currentNode.setNext(new Node<E>(value, null));
+			this.tail = currentNode;
 			this.length++;
 		}
 	}
