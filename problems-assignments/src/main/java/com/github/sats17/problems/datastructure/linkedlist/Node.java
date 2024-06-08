@@ -1,5 +1,8 @@
 package com.github.sats17.problems.datastructure.linkedlist;
 
+import java.util.Objects;
+import java.util.UUID;
+
 public class Node<E> {
 
 	private E value;
@@ -9,6 +12,9 @@ public class Node<E> {
 		super();
 		this.value = value;
 		this.next = next;
+	}
+
+	public Node() {
 	}
 
 	public E getValue() {
