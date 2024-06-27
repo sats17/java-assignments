@@ -19,6 +19,22 @@ public class BinaryTreeUtils {
 
 	}
 
+	/**
+	 * This is bruteforce approach with complextiy O(2N) where n is number of nodes
+	 * @param <E>
+	 * @param node
+	 */
+	public static <E> void checkIfTreeIsBalancedOrNot(Node<E> node) {
+		Integer leftHeight = findHeight(node.left);
+		Integer rightHeight = findHeight(node.right);
+		if(leftHeight != rightHeight) {
+			System.out.println("Tree is not balanced");
+		} else {
+			System.out.println("Tree is balanced");
+		}
+
+	}
+	
 	private static int max(Integer leftDepth, Integer rightDepth) {
 		if (leftDepth < rightDepth) {
 			return rightDepth;
@@ -116,78 +132,6 @@ public class BinaryTreeUtils {
 		return true;
 	}
 
-	public static void main(String[] args) {
-//		Node<Integer> root = createTempTree();
-//
-//		System.out.println(findHeight(root));
-//		Node<Integer> root = new Node<>(50);
-//		for(int i = 1; i <= 5; i++) {
-//			
-//			Integer val = i * 200;
-//			System.out.println("Inserting node " + val);
-//			insertValueInTree(root, val, (a, b) -> b.compareTo(a));
-//		}
-//		
-//		printTree(root);
-
-//		fibbFlow(8);
-
-		int matrix[][] = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
-		/**
-		 * 123 456 789
-		 * 
-		 * 741 852
-		 * 
-		 * 
-		 * 789 456 123
-		 * 
-		 */
-
-//		for(int i = 0; i <3; i++) {
-//			for(int j = 0; j<3; j++) {
-//				System.out.print(matrix[j][i]);
-//			}
-//			System.out.println("\n");
-//		}
-
-//		for(int i = 2; i>=0; i--) {
-//			for(int j = 0; j<3; j++) {
-//				System.out.print(matrix[i][j]);
-//			}
-//			System.out.println("\n");
-//		}
-
-		System.out.println(isPrime(1));
-
-		Integer value = 90;
-
-		Integer counter = 0;
-
-		List<Integer> primeNumbers = new ArrayList<Integer>();
-		while (counter <= value) {
-			if (isPrime(counter)) {
-				primeNumbers.add(counter);
-			}
-			counter++;
-		}
-
-		System.out.println(primeNumbers);
-
-//		int secondHalfPointer = ;
-
-		for (int firstPointer = 0; firstPointer < primeNumbers.size(); firstPointer++) {
-			for (int secondHalfPointer = primeNumbers.size() / 2; secondHalfPointer < primeNumbers
-					.size(); secondHalfPointer++) {
-				if(primeNumbers.get(firstPointer) + primeNumbers.get(secondHalfPointer) == value) {
-					System.out.println("First value "+ primeNumbers.get(firstPointer));
-					System.out.println("Second value "+ primeNumbers.get(secondHalfPointer));
-					
-				}
-			}
-		}
-
-	}
-
 	private static Node<Integer> createTempTree() {
 		Node<Integer> root = new Node<>(50);
 		Node<Integer> node1 = new Node<>(30);
@@ -196,6 +140,7 @@ public class BinaryTreeUtils {
 		Node<Integer> node4 = new Node<>(70);
 		Node<Integer> node5 = new Node<>(60);
 		Node<Integer> node6 = new Node<>(80);
+		Node<Integer> node7 = new Node<>(90);
 
 		// Link nodes to form the tree
 		root.left = node1;
@@ -204,8 +149,16 @@ public class BinaryTreeUtils {
 		node1.right = node3;
 		node4.left = node5;
 		node4.right = node6;
+		node6.left = node7;
 		return root;
 
+	}
+
+	public static void main(String[] args) {
+	
+		Node<Integer> tree = createTempTree();
+		checkIfTreeIsBalancedOrNot(tree);
+	
 	}
 
 }
