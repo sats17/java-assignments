@@ -1,4 +1,7 @@
-public java.util.*;
+package com.github.sats17.problems.assignments;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 // https://leetcode.com/problems/sort-characters-by-frequency/
 public class SortCharactersByFrequency {
