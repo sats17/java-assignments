@@ -3,7 +3,9 @@ package com.github.sats17.problems.datastructure.binarytree;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class BinaryTreeUtils {
 
@@ -153,12 +155,57 @@ public class BinaryTreeUtils {
 		return root;
 
 	}
+	
+	public static List<Integer> treeToArray(Node<Integer> root) {
+//		data.add(root.key);
+		List<Integer> data = new ArrayList<>();
+		Queue<Node<Integer>> queue = new LinkedList<>();
+		queue.add(root);
+		
+		while(!queue.isEmpty()) {
+			
+			Node<Integer> currentNode = queue.poll();
+			
+			data.add(currentNode.key);
+			
+			if(currentNode.key == -1) {
+				continue;
+			}
+			
+			if(currentNode.left != null) {
+				queue.add(currentNode.left);
+			} else {
+				currentNode.left = new Node<Integer>(-1);
+				queue.add(currentNode.left);
+			}
+			
+			if(currentNode.right != null) {
+				queue.add(currentNode.right);
+			} else {
+				currentNode.right = new Node<Integer>(-1);
+				queue.add(currentNode.right);
+			}
+				
+		}
+		
+		System.out.println(data);
+		
+		
+		return null;
+	}
 
 	public static void main(String[] args) {
 	
-		Node<Integer> tree = createTempTree();
-		checkIfTreeIsBalancedOrNot(tree);
-	
+		//Node<Integer> tree = createTempTree();
+//		checkIfTreeIsBalancedOrNot(tree);
+		
+		Node<Integer>  tree = new Node(1);
+        tree.left = new Node<Integer>(2);
+        tree.right = new Node(3);
+        tree.right.right = new Node(7);
+        
+        treeToArray(tree);
+        
 	}
 
 }
