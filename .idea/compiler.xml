@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="problems-assignments" />
+        <module name="basic-assignments" />
+        <module name="inheritance-assignments" />
+        <module name="webflux-assignments" />
+        <module name="lambda-assignments" />
+        <module name="thread-assignments" />
+        <module name="collections-assignments" />
+        <module name="reactivestreams-assignments" />
+        <module name="streams-assignments" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="java-assignments" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
