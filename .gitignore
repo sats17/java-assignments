@@ -2,3 +2,79 @@
 .classpath
 .project
 target
+
+# Ignore build results
+/build/
+/out/
+/target/
+
+# Ignore IDE-specific files
+# IntelliJ IDEA
+.idea/
+.idea/**
+*.iml
+*.iws
+*.ipr
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# Maven specific
+.mvn/
+!**/src/main/**/mvnw*
+!**/src/test/**/mvnw*
+log/
+
+# Gradle specific
+.gradle/
+build/
+!gradle-wrapper.jar
+!gradlew
+!gradlew.bat
+
+# Bytecode files
+*.class
+
+# Logs
+*.log
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.swo
+*.DS_Store
+*.bak
+*.orig
+
+# Ignore OS generated files
+Thumbs.db
+.DS_Store
+
+# Ignore IntelliJ-specific caches and logs
+.idea/
+.idea_modules/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/vcs.xml
+
+# Ignore Eclipse-specific metadata files
+.metadata/
+bin/
+tmp/
+
+# Ignore package-lock.json and npm-debug.log
+package-lock.json
+npm-debug.log
+node_modules/
+
+# Ignore virtual environment folders
+venv/
+.env/
+
+# Ignore dependency directories
+lib/
+libs/
