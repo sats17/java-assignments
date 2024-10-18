@@ -1,4 +1,4 @@
-package com.github.sats17.models;
+package com.github.sats17.models.h2;
 
 import jakarta.persistence.*;
 

@@ -1,6 +1,6 @@
-package com.github.sats17.repository;
+package com.github.sats17.repository.h2;
 
-import com.github.sats17.models.AuctionUser;
+import com.github.sats17.models.h2.AuctionUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
