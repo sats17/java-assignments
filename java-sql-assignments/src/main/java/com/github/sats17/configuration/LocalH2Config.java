@@ -32,9 +32,10 @@ public class LocalH2Config {
     public DataSource h2DataSource() {
 
         return DataSourceBuilder.create()
-//                                .url("jdbc:h2:mem:localh2DataSourcetestdb")
-//                                .driverClassName("org.h2.Driver")
-//                .username("admin").password("admin")
+                                .url("jdbc:h2:mem:localh2DataSourcetestdb")
+                                .driverClassName("org.h2.Driver")
+
+                .username("admin").password("admin")
                                 .build();
 //        try {
 //            System.out.println("DataSource URL: " + dataSource.getConnection().getMetaData().getURL());

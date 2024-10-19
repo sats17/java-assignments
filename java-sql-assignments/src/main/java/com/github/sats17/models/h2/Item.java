@@ -1,18 +1,24 @@
 package com.github.sats17.models.h2;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Item {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @Column(name = "item_id")
     private Long itemId;
     private String name;
+
+    @Column(name = "starting_price")
     private Long startingPrice;
+
+    @Column(name = "current_price")
+    private Long currentPrice;
+
+//    @OneToOne(mappedBy = "item", optional = true)
+//    private Auction auction;
 
     public Long getItemId() {
         return itemId;
@@ -37,4 +43,20 @@ public class Item {
     public void setStartingPrice(Long startingPrice) {
         this.startingPrice = startingPrice;
     }
+
+    public Long getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(Long currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    //    public Auction getAuction() {
+//        return auction;
+//    }
+//
+//    public void setAuction(Auction auction) {
+//        this.auction = auction;
+//    }
 }

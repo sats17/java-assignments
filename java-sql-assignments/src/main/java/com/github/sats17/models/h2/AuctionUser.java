@@ -3,11 +3,13 @@ package com.github.sats17.models.h2;
 import jakarta.persistence.*;
 import java.util.List;
 
-@Entity
+
+@Entity(name =  "AUCTION_USER")
 public class AuctionUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name =  "user_id")
     private Long userId;
 
     private String name;

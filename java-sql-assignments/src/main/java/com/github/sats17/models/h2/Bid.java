@@ -9,8 +9,46 @@ public class Bid {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bidId;
 
-    @ManyToOne(fetch =  FetchType.LAZY)
+    private Long amount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private AuctionUser auctionUser;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auction_id")
+    private Auction auction;
+
+    public Long getBidId() {
+        return bidId;
+    }
+
+    public void setBidId(Long bidId) {
+        this.bidId = bidId;
+    }
+
+    public AuctionUser getAuctionUser() {
+        return auctionUser;
+    }
+
+    public void setAuctionUser(AuctionUser auctionUser) {
+        this.auctionUser = auctionUser;
+    }
+
+    public Long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
+    }
+
+    public Auction getAuction() {
+        return auction;
+    }
+
+    public void setAuction(Auction auction) {
+        this.auction = auction;
+    }
 }
