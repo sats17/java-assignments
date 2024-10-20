@@ -23,6 +23,11 @@ public class AuctionController {
         return auctionService.getAuctionList();
     }
 
+    @GetMapping("/{auctionId}")
+    public List<Auction> getAuctionByAuctionId(@PathVariable Long auctionId) {
+        return auctionService.getAuctionList();
+    }
+
     @PostMapping("/{auctionId}/bid")
     public ResponseEntity<String> createBid(
             @PathVariable Long auctionId,

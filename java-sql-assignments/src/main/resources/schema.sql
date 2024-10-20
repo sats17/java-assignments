@@ -7,8 +7,7 @@ CREATE TABLE auction_user (
 CREATE TABLE item (
     item_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    starting_price BIGINT NOT NULL,
-    current_price BIGINT NOT NULL
+    starting_price BIGINT NOT NULL
 );
 
 CREATE TABLE auction (

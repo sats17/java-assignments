@@ -3,11 +3,13 @@ package com.github.sats17.service;
 import com.github.sats17.models.h2.Auction;
 import com.github.sats17.models.h2.AuctionUser;
 import com.github.sats17.models.h2.Bid;
+import com.github.sats17.models.response.AuctionResponse;
 import com.github.sats17.repository.h2.AuctionRepository;
 import com.github.sats17.repository.h2.AuctionUserRepository;
 import com.github.sats17.repository.h2.BidRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +29,11 @@ public class AuctionService {
         return auctionRepository.findAll();
     }
 
+    public AuctionResponse getAuctionByAuctionId(Long auctionId) {
+
+    }
+
+//  TODO: Transactional
     public boolean createBid(Long userId, Long auctionId, Long itemId, Long amount) {
         Auction auction = auctionRepository.findById(auctionId).get();
         AuctionUser user = auctionUserRepository.findById(userId).get();

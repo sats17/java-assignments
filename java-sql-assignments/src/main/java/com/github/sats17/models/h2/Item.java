@@ -6,16 +6,13 @@ import jakarta.persistence.*;
 public class Item {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long itemId;
     private String name;
 
     @Column(name = "starting_price")
     private Long startingPrice;
-
-    @Column(name = "current_price")
-    private Long currentPrice;
 
 //    @OneToOne(mappedBy = "item", optional = true)
 //    private Auction auction;
@@ -44,13 +41,6 @@ public class Item {
         this.startingPrice = startingPrice;
     }
 
-    public Long getCurrentPrice() {
-        return currentPrice;
-    }
-
-    public void setCurrentPrice(Long currentPrice) {
-        this.currentPrice = currentPrice;
-    }
 
     //    public Auction getAuction() {
 //        return auction;
