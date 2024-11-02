@@ -26,3 +26,12 @@ CREATE TABLE bid (
     FOREIGN KEY (user_id) REFERENCES auction_user(user_id),
     FOREIGN KEY (auction_id) REFERENCES auction(auction_id)
 );
+
+CREATE TABLE auction_users (
+    auction_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    PRIMARY KEY (auction_id, user_id),
+    FOREIGN KEY (auction_id) REFERENCES auction(auction_id),
+    FOREIGN KEY (user_id) REFERENCES auction_user(user_id)
+);
+

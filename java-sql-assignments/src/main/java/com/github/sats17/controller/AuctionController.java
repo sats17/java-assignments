@@ -2,6 +2,7 @@ package com.github.sats17.controller;
 
 import com.github.sats17.models.h2.Auction;
 import com.github.sats17.models.h2.Bid;
+import com.github.sats17.models.request.AddUserToAuctionRequest;
 import com.github.sats17.models.request.BidRequest;
 import com.github.sats17.service.AuctionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,19 @@ public class AuctionController {
             return new ResponseEntity<>("Bid created", HttpStatusCode.valueOf(200));
         } else {
             return new ResponseEntity<>("Bid creation failed", HttpStatusCode.valueOf(500));
+        }
+    }
+
+    @PostMapping("/{auctionId}/user")
+    public ResponseEntity<String> addUserToAuction(
+            @PathVariable Long auctionId,
+            @RequestBody AddUserToAuctionRequest request) {
+
+        boolean success = auctionService.addUserToAuction(auctionId, request.getUserId());
+        if (success) {
+            return ResponseEntity.ok("User added to auction successfully.");
+        } else {
+            return ResponseEntity.badRequest().body("Failed to add user to auction.");
         }
     }
 

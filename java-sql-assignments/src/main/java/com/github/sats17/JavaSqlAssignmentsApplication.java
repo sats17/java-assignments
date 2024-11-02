@@ -49,7 +49,7 @@ public class JavaSqlAssignmentsApplication {
             Item item = new Item();
             item.setName("item_"+i);
             item.setStartingPrice((long)10+i);
-            item.setCurrentPrice((long)10+i);
+//            item.setCurrentPrice((long)10+i);
             itemRepository.save(item);
         }
         itemRepository.findAll().forEach(item -> System.out.println(item.getItemId()));

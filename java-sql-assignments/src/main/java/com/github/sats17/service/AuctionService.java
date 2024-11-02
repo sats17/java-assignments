@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuctionService {
@@ -29,8 +30,31 @@ public class AuctionService {
         return auctionRepository.findAll();
     }
 
-    public AuctionResponse getAuctionByAuctionId(Long auctionId) {
+//    public AuctionResponse getAuctionByAuctionId(Long auctionId) {
+//addUserToAuction
+//    }
 
+    public boolean addUserToAuction(Long auctionId, Long userId) {
+
+        Optional<Auction> auctionOpt = auctionRepository.findById(auctionId);
+        Optional<AuctionUser> userOpt = auctionUserRepository.findById(userId);
+
+        if (auctionOpt.isPresent() && userOpt.isPresent()) {
+            Auction auction = auctionOpt.get();
+            AuctionUser user = userOpt.get();
+
+            // Add the user to the auction's user set
+            auction.getAuctionUsers().add(user);
+
+            // Optional: Add the auction to the user's auctions set for bidirectional relationship
+//            user.getAuctions().add(auction);
+
+            // Save the updated auction entity
+            auctionRepository.save(auction);
+
+            return true;
+        }
+        return false;
     }
 
 //  TODO: Transactional
