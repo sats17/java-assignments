@@ -1,3 +1,3 @@
-1) Create a basic API and script for bids and auction.
-2) Use transactional API for bid operation. Think more that do I need transaction API.
-3) Use locking system in bid API.
+1) Create a basic API and script for bids and auction. - Done
+2) Use transactional API for bid operation. Think more that do I need transaction API. - Bts acklog
+3) Use locking system in bid API. - Pick this in next time and start on script to create locking issue.

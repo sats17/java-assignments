@@ -12,6 +12,7 @@ import com.github.sats17.repository.h2.BidRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -71,6 +72,12 @@ public class AuctionService {
         AuctionUser user = auctionUserRepository.findById(userId).get();
 
         if(!auction.getAuctionUsers().contains(user)) {
+            System.out.println("User is not part of auction");
+            return false;
+        }
+
+        if(auction.getEndTime() < Instant.now().getEpochSecond()) {
+            System.out.println("Auction is closed");
             return false;
         }
 
@@ -78,7 +85,8 @@ public class AuctionService {
 
 
         if (currentAmount != null && amount <= currentAmount) {
-            System.out.println("Bid cannot place due to amount is same. User ID " + userId);
+            System.out.println("Bid cannot place due to invalid amount, currentAmount " +currentAmount+"" +
+                    ", User Amount "+amount+", User ID " + userId);
             return false;
         }
 
