@@ -4,15 +4,17 @@ import com.github.sats17.models.h2.Auction;
 import com.github.sats17.models.h2.AuctionUser;
 import com.github.sats17.models.h2.Bid;
 import com.github.sats17.models.response.AuctionResponse;
+import com.github.sats17.models.response.BidResponse;
+import com.github.sats17.models.response.ItemResponse;
 import com.github.sats17.repository.h2.AuctionRepository;
 import com.github.sats17.repository.h2.AuctionUserRepository;
 import com.github.sats17.repository.h2.BidRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AuctionService {
@@ -26,13 +28,20 @@ public class AuctionService {
     @Autowired
     AuctionUserRepository auctionUserRepository;
 
-    public List<Auction> getAuctionList() {
-        return auctionRepository.findAll();
+    public List<AuctionResponse> getAuctionList() {
+        List<Auction> auctions =  auctionRepository.findAll();
+        return auctions.stream().map( auction -> {
+            return new AuctionResponse(
+                    auction.getAuctionId(),
+                    auction.getStartTime(),
+                    auction.getEndTime(),
+                    new ItemResponse(auction.getItem().getItemId(), auction.getItem().getName(), auction.getItem().getStartingPrice()),
+                    auction.getAuctionUsers().stream().map(AuctionUser::getUserId).collect(Collectors.toSet()),
+                    auction.getBids().stream().map(bid -> new BidResponse(bid.getBidId(), bid.getAmount(), bid.getAuctionUser().getUserId(), bid.getAuction().getAuctionId())).toList()
+            );
+        }).toList();
     }
 
-//    public AuctionResponse getAuctionByAuctionId(Long auctionId) {
-//addUserToAuction
-//    }
 
     public boolean addUserToAuction(Long auctionId, Long userId) {
 
@@ -43,13 +52,12 @@ public class AuctionService {
             Auction auction = auctionOpt.get();
             AuctionUser user = userOpt.get();
 
-            // Add the user to the auction's user set
+            if(auction.getAuctionUsers().contains(user)) {
+                return false;
+            }
+
             auction.getAuctionUsers().add(user);
 
-            // Optional: Add the auction to the user's auctions set for bidirectional relationship
-//            user.getAuctions().add(auction);
-
-            // Save the updated auction entity
             auctionRepository.save(auction);
 
             return true;
@@ -57,10 +65,14 @@ public class AuctionService {
         return false;
     }
 
-//  TODO: Transactional
+    //  TODO: Transactional
     public boolean createBid(Long userId, Long auctionId, Long itemId, Long amount) {
         Auction auction = auctionRepository.findById(auctionId).get();
         AuctionUser user = auctionUserRepository.findById(userId).get();
+
+        if(!auction.getAuctionUsers().contains(user)) {
+            return false;
+        }
 
         Long currentAmount = bidRepository.findMaxAmountByAuctionId(auctionId);
 

@@ -1,5 +1,6 @@
 package com.github.sats17.models.h2;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity

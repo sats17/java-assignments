@@ -1,9 +1,8 @@
 package com.github.sats17.controller;
 
-import com.github.sats17.models.h2.Auction;
-import com.github.sats17.models.h2.Bid;
 import com.github.sats17.models.request.AddUserToAuctionRequest;
 import com.github.sats17.models.request.BidRequest;
+import com.github.sats17.models.response.AuctionResponse;
 import com.github.sats17.service.AuctionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -20,12 +19,12 @@ public class AuctionController {
     AuctionService auctionService;
 
     @GetMapping
-    public List<Auction> getAuctions() {
+    public List<AuctionResponse> getAuctions() {
         return auctionService.getAuctionList();
     }
 
     @GetMapping("/{auctionId}")
-    public List<Auction> getAuctionByAuctionId(@PathVariable Long auctionId) {
+    public List<AuctionResponse> getAuctionByAuctionId(@PathVariable Long auctionId) {
         return auctionService.getAuctionList();
     }
 
@@ -47,11 +46,16 @@ public class AuctionController {
             @PathVariable Long auctionId,
             @RequestBody AddUserToAuctionRequest request) {
 
+        if(request.getUserId() == null || auctionId == null) {
+            return ResponseEntity.badRequest().body("Invalid request.");
+        }
+
+
         boolean success = auctionService.addUserToAuction(auctionId, request.getUserId());
         if (success) {
             return ResponseEntity.ok("User added to auction successfully.");
         } else {
-            return ResponseEntity.badRequest().body("Failed to add user to auction.");
+            return ResponseEntity.internalServerError().body("Failed to add user to auction.");
         }
     }
 

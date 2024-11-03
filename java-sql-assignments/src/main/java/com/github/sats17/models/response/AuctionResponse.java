@@ -4,6 +4,7 @@ import com.github.sats17.models.h2.Item;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Set;
 
 public class AuctionResponse {
 
@@ -13,8 +14,28 @@ public class AuctionResponse {
 
     private Long endTime;
 
-    private List<ItemResponse> items;
+    private ItemResponse item;
 
+    private Set<Long> userId;
+
+    private List<BidResponse> bids;
+
+    public AuctionResponse(Long auctionId, Long startTime, Long endTime, ItemResponse item, Set<Long> userId, List<BidResponse> bids) {
+        this.auctionId = auctionId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.item = item;
+        this.userId = userId;
+        this.bids = bids;
+    }
+
+    public Set<Long> getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Set<Long> userId) {
+        this.userId = userId;
+    }
 
     public Long getAuctionId() {
         return auctionId;
@@ -40,11 +61,19 @@ public class AuctionResponse {
         this.endTime = endTime;
     }
 
-    public List<ItemResponse> getItems() {
-        return items;
+    public ItemResponse getItem() {
+        return item;
     }
 
-    public void setItems(List<ItemResponse> items) {
-        this.items = items;
+    public void setItem(ItemResponse item) {
+        this.item = item;
+    }
+
+    public List<BidResponse> getBids() {
+        return bids;
+    }
+
+    public void setBids(List<BidResponse> bids) {
+        this.bids = bids;
     }
 }

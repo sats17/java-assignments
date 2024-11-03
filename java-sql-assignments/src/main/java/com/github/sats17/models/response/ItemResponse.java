@@ -7,7 +7,12 @@ public class ItemResponse {
     private Long itemId;
     private String name;
     private Long startingPrice;
-    private Long currentPrice;
+
+    public ItemResponse(Long itemId, String name, Long startingPrice) {
+        this.itemId = itemId;
+        this.name = name;
+        this.startingPrice = startingPrice;
+    }
 
     public Long getStartingPrice() {
         return startingPrice;
@@ -15,14 +20,6 @@ public class ItemResponse {
 
     public void setStartingPrice(Long startingPrice) {
         this.startingPrice = startingPrice;
-    }
-
-    public Long getCurrentPrice() {
-        return currentPrice;
-    }
-
-    public void setCurrentPrice(Long currentPrice) {
-        this.currentPrice = currentPrice;
     }
 
     public String getName() {
