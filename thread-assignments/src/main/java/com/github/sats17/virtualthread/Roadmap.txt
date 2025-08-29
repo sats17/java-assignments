@@ -1,0 +1,56 @@
+
+    ("Day 1 – Virtual Threads Overview",
+     "- Read: JEP 444: https://openjdk.org/jeps/444\n"
+     "- Read: Baeldung Intro: https://www.baeldung.com/java-virtual-threads\n"
+     "- Try: Create and run a virtual thread\n"),
+
+    ("Day 2 – Executors and Virtual Thread Pools",
+     "- Read: Inside Java article: https://inside.java/2022/04/26/virtual-threads/\n"
+     "- Try: Use Executors.newVirtualThreadPerTaskExecutor()\n"),
+
+    ("Day 3 – Diagnosing Thread Pinning",
+     "- Read: Diagnosing pinning: https://inside.java/2022/11/15/diagnosing-virtual-thread-pinning/\n"
+     "- Try: Use -Djdk.tracePinnedThreads=full and observe logs\n"),
+
+    ("Day 4 – Structured Concurrency Basics",
+     "- Read: JEP 428: https://openjdk.org/jeps/428\n"
+     "- Try: Use StructuredTaskScope to run and join concurrent tasks\n"),
+
+    ("Day 5 – Mini Project: Service with Virtual Threads",
+     "- Build: Simulate web service using virtual threads\n"
+     "- Use StructuredTaskScope to parallel-fetch data\n"),
+
+    ("Day 6 – ScopedValue and CompletableFuture",
+     "- Read: JEP 429: https://openjdk.org/jeps/429\n"
+     "- Practice: Replace ThreadLocal with ScopedValue\n"),
+
+    ("Day 7 – Recap and Tools",
+     "- Review all concepts\n"
+     "- Explore thread diagnostics using jcmd or JFR\n"),
+
+    ("Day 8 – ReentrantLock vs synchronized",
+     "- Compare under contention\n"
+     "- Practice using locks in virtual thread context\n"),
+
+    ("Day 9 – Refactor Legacy Code",
+     "- Replace thread pools with virtual thread executor\n"
+     "- Replace synchronized with ReentrantLock\n"),
+
+    ("Day 10 – Advanced Structured Concurrency",
+     "- Read: JEP 462: https://openjdk.org/jeps/462\n"
+     "- Implement: ShutdownOnSuccess scope\n"),
+
+    ("Day 11 – ForkJoinPool and Parallel Streams",
+     "- Observe behavior with virtual threads\n"
+     "- Combine with ScopedValue for safety\n"),
+
+    ("Day 12 – Load and Performance Testing",
+     "- Compare virtual vs platform thread performance\n"),
+
+    ("Day 13 – Advanced Topics (Optional)",
+     "- Learn about Loom internals, pinning, carrier thread rebinding\n"),
+
+    ("Day 14 – Final Recap and Cheat Sheet",
+     "- Summarize learnings\n"
+     "- Build personal cheat sheet for daily reference\n")
+]
