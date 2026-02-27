@@ -6,7 +6,7 @@ public class VTPinnedIssue {
 
     private static final Object LOCK = new Object();
 
-    public static void main(String[] args) throws InterruptedException {
+    static void main(String[] args) throws InterruptedException {
         System.out.println("jo");
         List<Thread> threads = new ArrayList<>();
 
