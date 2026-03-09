@@ -9,7 +9,7 @@ public class BillionRowChallengeV1 {
 
     public void solve() {
 
-        String filePath = "C:\\Users\\satis\\projects\\java-assignments\\basic-assignments\\src\\main\\java\\com\\github\\sats17\\basicassignment\\measurements.txt";
+        String filePath = "C:\\Users\\satis\\projects\\java-assignments\\basic-assignments\\src\\main\\java\\com\\github\\sats17\\basicassignment\\measurements_10million.txt";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             Map<String, List<Double>> storage = new HashMap<>();
