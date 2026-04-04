@@ -7,6 +7,15 @@ import java.util.*;
 
 // Use this command to generate measurement file from 1brc repo => java --class-path target/average-1.0.0-SNAPSHOT.jar dev.morling.onebrc.CreateMeasurements 1000000
 // Use this command in VM to fetch jfr profile => -XX:StartFlightRecording=filename=C:\Users\satis\projects\java-assignments\basic-assignments\src\main\java\com\github\sats17\basicassignment\recording.jfr -XX:-Inline
+
+/**
+ * V2 - Refactored for Code Reusability
+ * Improvements over V1:
+ * - Extracted data extraction logic into separate method: extractDataByCity()
+ * - Extracted string generation logic into separate method: generateString()
+ * - Replaced ArrayList with LinkedList for index-based operations, as we are frequently adding at specific indices hence LinkedList is more efficient for such operations.
+ * - Still single-threaded, but better organized
+ */
 public class BillionRowChallengeV2 {
 
     public void solve() {
@@ -67,7 +76,7 @@ public class BillionRowChallengeV2 {
                 var presentMax = val.get(0);
                 var presentMin = val.get(1);
                 var presentSum = val.get(2);
-                var presentCount = val.get(3);
+                var presentCount = val.get(4);
 
                 var newMax = Math.max(convertedTemp, presentMax);
                 var newMin = Math.min(convertedTemp, presentMin);

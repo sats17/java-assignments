@@ -13,16 +13,57 @@ import java.util.concurrent.TimeUnit;
 // Use this command in VM to fetch jfr profile => -XX:StartFlightRecording=filename=C:\Users\satis\projects\java-assignments\basic-assignments\src\main\java\com\github\sats17\basicassignment\recording.jfr -XX:-Inline
 
 /**
- * V3 - Multi-Threaded Performance Optimization
- * Improvements over V2:
- * - Introduced ExecutorService with fixed thread pool (number of CPU cores)
- * - Replaced HashMap with ConcurrentHashMap for thread-safe concurrent access
- * - Implemented batch processing: reads lines in batches and submits tasks to thread pool
- * - Each batch is processed by separate threads to parallelize computation
- * - Uses proper shutdown and awaitTermination to ensure all threads complete before results
- * - Significant performance improvement through multi-core utilization
+ * - V4 - Data Class Refactor and used over linkedlist
+ * Improvements over V3:
+ * - Introduced a dedicated data class to encapsulate statistics (max, min, sum, avg, count) for better code readability and maintainability
+ * - In V3 tiny overhead of get()/set() × 10M rows = big slowdown, so in V4 optimized data updates by modifying the existing object instead of creating new ones.
  */
-public class BillionRowChallengeV3 {
+public class BillionRowChallengeV4 {
+
+    // Create this record to modify later
+    static class data {
+        Double max;
+        Double min;
+        Double sum;
+        Double avg;
+        Double count;
+
+            public data(Double max, Double min, Double sum, Double avg, Double count) {
+                this.max = max;
+                this.min = min;
+                this.sum = sum;
+                this.avg = avg;
+                this.count = count;
+            }
+
+            public Double getMax() {
+                return max;
+            }
+
+            public Double getMin() {
+                return min;
+            }
+
+            public Double getSum() {
+                return sum;
+            }
+
+            public Double getAvg() {
+                return avg;
+            }
+
+            public Double getCount() {
+                return count;
+            }
+
+            public void update(Double newTemp) {
+                this.max = Math.max(this.max, newTemp);
+                this.min = Math.min(this.min, newTemp);
+                this.sum += newTemp;
+                this.count += 1;
+                this.avg = this.sum / this.count;
+            }
+    }
 
     public void solve() {
 
@@ -31,7 +72,7 @@ public class BillionRowChallengeV3 {
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService pool = Executors.newFixedThreadPool(cores);
 
-        Map<String, List<Double>> storage = new ConcurrentHashMap<>();
+        Map<String, data> storage = new ConcurrentHashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             // Timer for batch processing and submission
@@ -78,7 +119,7 @@ public class BillionRowChallengeV3 {
         }
     }
 
-    void processBatch(List<String> lines, Map<String, List<Double>> storage) {
+    void processBatch(List<String> lines, Map<String, data> storage) {
         for (String line : lines) {
             extractDataByCity(line, storage);
         }
@@ -93,21 +134,21 @@ public class BillionRowChallengeV3 {
         return String.format("%.2f sec", sec);
     }
 
-    private static StringBuilder generateString(Map<String, List<Double>> storage) {
-        Map<String, List<Double>> sortedMap = new TreeMap<>(storage);
+    private static StringBuilder generateString(Map<String, data> storage) {
+        Map<String, data> sortedMap = new TreeMap<>(storage);
         StringBuilder sb = new StringBuilder();
         sb.append("{");
 
         for(var entry : sortedMap.entrySet()) {
             var key = entry.getKey();
-            List<Double> val = entry.getValue();
+            data val = entry.getValue();
             sb.append(key)
                     .append("=")
-                    .append(val.get(1))
+                    .append(val.min)
                     .append("/")
-                    .append(val.get(3))
+                    .append(val.avg)
                     .append("/")
-                    .append(val.get(0))
+                    .append(val.max)
                     .append(", ");
         }
         sb.setLength(sb.length() -2);
@@ -115,34 +156,16 @@ public class BillionRowChallengeV3 {
         return sb;
     }
 
-    private static void extractDataByCity(String line, Map<String, List<Double>> storage) {
+    private static void extractDataByCity(String line, Map<String, data> storage) {
         String[] splittedLine = line.split(";");
         String city = splittedLine[0];
         String temp = splittedLine[1];
         Double convertedTemp = Double.valueOf(temp);
         storage.compute(city, (key, val) -> {
             if(val == null) {
-                LinkedList<Double> list = new LinkedList<>();
-                list.add(convertedTemp); // max
-                list.add(convertedTemp); // min
-                list.add(convertedTemp); // sum
-                list.add(convertedTemp); // avg
-                list.add(1D); // count
-                return list;
+                return new data(convertedTemp, convertedTemp, convertedTemp, convertedTemp, 1D);
             } else {
-                var presentMax = val.get(0);
-                var presentMin = val.get(1);
-                var presentSum = val.get(2);
-                var presentCount = val.get(4);
-
-                var newMax = Math.max(convertedTemp, presentMax);
-                var newMin = Math.min(convertedTemp, presentMin);
-                var newAvg = (presentSum + convertedTemp) / (presentCount + 1);
-                val.set(0, newMax);
-                val.set(1, newMin);
-                val.set(2, presentSum + convertedTemp);
-                val.set(3, newAvg);
-                val.set(4, presentCount + 1);
+                val.update(convertedTemp);
                 return val;
             }
         });
@@ -150,7 +173,7 @@ public class BillionRowChallengeV3 {
 
 
     public static void main(String[] args) {
-        BillionRowChallengeV3 challenge = new BillionRowChallengeV3();
+        BillionRowChallengeV4 challenge = new BillionRowChallengeV4();
         long start = System.nanoTime();
 
         challenge.solve();

@@ -5,6 +5,15 @@ import java.util.*;
 
 // Use this command to generate measurement file from 1brc repo => java --class-path target/average-1.0.0-SNAPSHOT.jar dev.morling.onebrc.CreateMeasurements 1000000
 // Use this command in VM to fetch jfr profile => -XX:StartFlightRecording=filename=C:\Users\satis\projects\java-assignments\basic-assignments\src\main\java\com\github\sats17\basicassignment\recording.jfr -XX:-Inline
+
+/**
+ * V1 - Baseline Implementation
+ * This is the initial version with a straightforward single-threaded approach.
+ * - Reads the file sequentially using BufferedReader
+ * - Stores statistics in a HashMap (city name -> [max, min, sum, avg, count])
+ * - Uses ArrayList for storing temperature statistics
+ * - Computes min/max/average on-the-fly during data insertion
+ */
 public class BillionRowChallengeV1 {
 
     public void solve() {
@@ -32,7 +41,7 @@ public class BillionRowChallengeV1 {
                         var presentMax = val.get(0);
                         var presentMin = val.get(1);
                         var presentSum = val.get(2);
-                        var presentCount = val.get(3);
+                        var presentCount = val.get(4);
 
                         var newMax = Math.max(convertedTemp, presentMax);
                         var newMin = Math.min(convertedTemp, presentMin);
