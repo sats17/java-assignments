@@ -17,18 +17,73 @@ import java.util.concurrent.TimeUnit;
  * Improvements over V3:
  * - Introduced a dedicated data class to encapsulate statistics (max, min, sum, avg, count) for better code readability and maintainability
  * - In V3 tiny overhead of get()/set() × 10M rows = big slowdown, so in V4 optimized data updates by modifying the existing object instead of creating new ones.
+ *
+ * - Used char array to split String instead of String.split() to reduce overhead of regex and multiple string creations.
+ *
+ * - Replaced Double with double to avoid unnecessary boxing and unboxing, which helped to reduce memory profiling.
+ */
+
+/**
+ * JMC (JFR) ANALYSIS CHECKLIST – 1BRC
+ *
+ * 1. CPU HOTSPOTS
+ *    - Open: Method Profiling / Hot Methods
+ *    - Check: Top CPU-consuming methods
+ *    - Goal: Identify slow parsing / hashing / logic
+ *
+ * 2. ALLOCATION PROFILE (MOST IMPORTANT)
+ *    - Open: Memory → Allocation (TLAB / Outside TLAB)
+ *    - Check: Most allocated classes
+ *    - Red flags: String, char[], Integer, double
+ *    - Goal: Reduce object creation
+ *
+ * 3. GC ANALYSIS
+ *    - Open: Garbage Collections
+ *    - Check: Pause time, frequency
+ *    - Goal: Low pauses, mostly young GC, avoid old GC
+ *
+ * 4. OBJECT STATISTICS
+ *    - Open: Object Statistics
+ *    - Check: Top object types by count/size
+ *    - Goal: Minimize heavy objects
+ *
+ * 5. ALLOCATION RATE
+ *    - Open: Memory Overview
+ *    - Check: MB/sec allocation rate
+ *    - Goal: As low as possible
+ *
+ * 6. THREAD ANALYSIS
+ *    - Open: Threads
+ *    - Check: CPU vs idle time, lock contention
+ *    - Goal: No blocking, fully CPU utilized
+ *
+ * 7. FILE I/O
+ *    - Open: File I/O
+ *    - Check: Read time, throughput
+ *    - Goal: Efficient file reading (not bottleneck)
+ *
+ * 8. EXCEPTIONS
+ *    - Open: Exceptions
+ *    - Check: Exception count
+ *    - Goal: Zero or minimal exceptions
+ *
+ * MENTAL MODEL:
+ * CPU → ALLOCATION → GC → THREADS → I/O
+ *
+ * CORE RULE:
+ * If allocation is high → performance will be slow.
  */
 public class BillionRowChallengeV4 {
 
     // Create this record to modify later
     static class data {
-        Double max;
-        Double min;
-        Double sum;
-        Double avg;
-        Double count;
+        double max;
+        double min;
+        double sum;
+        double avg;
+        double count;
 
-            public data(Double max, Double min, Double sum, Double avg, Double count) {
+            public data(double max, double min, double sum, double avg, double count) {
                 this.max = max;
                 this.min = min;
                 this.sum = sum;
@@ -36,27 +91,15 @@ public class BillionRowChallengeV4 {
                 this.count = count;
             }
 
-            public Double getMax() {
+            public double getMax() {
                 return max;
             }
 
-            public Double getMin() {
+            public double getMin() {
                 return min;
             }
 
-            public Double getSum() {
-                return sum;
-            }
-
-            public Double getAvg() {
-                return avg;
-            }
-
-            public Double getCount() {
-                return count;
-            }
-
-            public void update(Double newTemp) {
+            public void update(double newTemp) {
                 this.max = Math.max(this.max, newTemp);
                 this.min = Math.min(this.min, newTemp);
                 this.sum += newTemp;
@@ -111,7 +154,7 @@ public class BillionRowChallengeV4 {
             long stringGenerationEnd = System.nanoTime();
             System.out.println("String generation time: " + formatTime(stringGenerationEnd - stringGenerationStart));
             
-            System.out.println(sb);
+//            System.out.println(sb);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -125,13 +168,8 @@ public class BillionRowChallengeV4 {
         }
     }
 
-    private String formatTime(long nanos) {
-        double ms = nanos / 1_000_000.0;
-        if (ms < 1000) {
-            return String.format("%.2f ms", ms);
-        }
-        double sec = nanos / 1_000_000_000.0;
-        return String.format("%.2f sec", sec);
+    private double formatTime(long nanos) {
+        return nanos / 1_000_000.0;
     }
 
     private static StringBuilder generateString(Map<String, data> storage) {
@@ -157,18 +195,23 @@ public class BillionRowChallengeV4 {
     }
 
     private static void extractDataByCity(String line, Map<String, data> storage) {
-        String[] splittedLine = line.split(";");
-        String city = splittedLine[0];
-        String temp = splittedLine[1];
-        Double convertedTemp = Double.valueOf(temp);
-        storage.compute(city, (key, val) -> {
-            if(val == null) {
-                return new data(convertedTemp, convertedTemp, convertedTemp, convertedTemp, 1D);
-            } else {
-                val.update(convertedTemp);
-                return val;
+        char[] lineCharArray = line.toCharArray();
+        for(int i = 0; i < lineCharArray.length; i++) {
+            if(lineCharArray[i] == ';') {
+                char[] temparr = Arrays.copyOfRange(lineCharArray, i + 1, lineCharArray.length);
+                double convertedTemp = Double.parseDouble(new String(temparr));
+                storage.compute(new String(lineCharArray, 0, i), (key, val) -> {
+                    if(val == null) {
+                        return new data(convertedTemp, convertedTemp, convertedTemp, convertedTemp, 1d);
+                    } else {
+                        val.update(convertedTemp);
+                        return val;
+                    }
+                });
+                break;
             }
-        });
+        }
+
     }
 
 
