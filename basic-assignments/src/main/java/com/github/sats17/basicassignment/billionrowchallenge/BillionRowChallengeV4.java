@@ -75,6 +75,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class BillionRowChallengeV4 {
 
+    // Util methods
+    private double formatTime(long nanos) {
+        return nanos / 1_000_000.0;
+    }
+
     // Create this record to modify later
     static class data {
         double max;
@@ -110,10 +115,10 @@ public class BillionRowChallengeV4 {
 
     public void solve() {
 
-        String filePath = "C:\\Users\\satis\\projects\\java-assignments\\basic-assignments\\src\\main\\java\\com\\github\\sats17\\basicassignment\\measurements_10million.txt";
+        String filePath = "C:\\Users\\satis\\projects\\java-assignments\\basic-assignments\\src\\main\\java\\com\\github\\sats17\\basicassignment\\measurements_100million.txt";
 
         int cores = Runtime.getRuntime().availableProcessors();
-        ExecutorService pool = Executors.newFixedThreadPool(cores);
+        ExecutorService pool = Executors.newFixedThreadPool(10);
 
         Map<String, data> storage = new ConcurrentHashMap<>();
 
@@ -153,8 +158,7 @@ public class BillionRowChallengeV4 {
             StringBuilder sb = generateString(storage);
             long stringGenerationEnd = System.nanoTime();
             System.out.println("String generation time: " + formatTime(stringGenerationEnd - stringGenerationStart));
-            
-//            System.out.println(sb);
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -166,10 +170,6 @@ public class BillionRowChallengeV4 {
         for (String line : lines) {
             extractDataByCity(line, storage);
         }
-    }
-
-    private double formatTime(long nanos) {
-        return nanos / 1_000_000.0;
     }
 
     private static StringBuilder generateString(Map<String, data> storage) {
@@ -213,7 +213,6 @@ public class BillionRowChallengeV4 {
         }
 
     }
-
 
     public static void main(String[] args) {
         BillionRowChallengeV4 challenge = new BillionRowChallengeV4();
