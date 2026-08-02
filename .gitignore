@@ -17,7 +17,6 @@ target
 # Ignore IDE-specific files
 # IntelliJ IDEA
 .idea/
-.idea**
 .idea/misc.xml
 .idea/**
 *.iml
