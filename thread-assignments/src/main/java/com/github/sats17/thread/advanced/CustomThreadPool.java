@@ -9,7 +9,7 @@ public class CustomThreadPool {
 
     List<Thread> threads;
     BlockingQueue<Runnable> tasks;
-    private static final Runnable POISON = () -> {};
+    private static final Runnable POISON = () -> {}; // Special task that wake all threads to close
 
     public CustomThreadPool(int threads) {
         this.threads = new ArrayList<>(threads);
