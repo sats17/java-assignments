@@ -7,61 +7,61 @@ import java.util.concurrent.BlockingQueue;
 
 public class CustomThreadPool {
 
-    private final int poolSize;
     List<Thread> threads;
     BlockingQueue<Runnable> tasks;
+    private static final Runnable POISON = () -> {};
 
-
-    public CustomThreadPool(int poolSize) {
-        this.poolSize = poolSize;
-        this.threads = new ArrayList<>(poolSize);
+    public CustomThreadPool(int threads) {
+        this.threads = new ArrayList<>(threads);
+        int poolSize = 100;
         this.tasks = new ArrayBlockingQueue<>(poolSize);
-        for(int i = 0; i < poolSize; i++) {
+        for(int i = 0; i < threads; i++) {
             Thread t = new Thread(() -> {
-                System.out.println("Thread started ");
                 while (true) {
                     try {
                         Runnable task = tasks.take();
+                        if (task == POISON) {
+                            break;
+                        }
                         task.run();
                     } catch (InterruptedException e) {
                         break;
                     }
+
                 }
-            });
-            System.out.println("Before start");
+            }, "custom-threadpool-"+i);
             t.start();
-            threads.add(t);
+            this.threads.add(t);
         }
     }
 
     public void submit(Runnable runnable) throws InterruptedException {
-        tasks.put(runnable);
+        tasks.add(runnable);
     }
     
     public void shutDown() {
-        for (Thread t: threads) {
-            System.out.println(t.getName());
-            t.interrupt();
+        System.out.println("Shutdown asked, once all task completed threadpool will shutdown");
+        for (int i = 0; i < threads.size(); i++) {
+            tasks.add(POISON);
         }
     }
 
     static void main() throws InterruptedException {
-        CustomThreadPool customThreadPool = new CustomThreadPool(1);
-        Runnable runnable = () ->  {
-            System.out.println("Work started "+Thread.currentThread().getName());
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        CustomThreadPool customThreadPool = new CustomThreadPool(2);
+        Runnable work = () ->  {
+            System.out.println("Work started on thread: "+Thread.currentThread().getName());
+            long sum = 0;
+            for (long i = 0; i < 5_000_000_000L; i++) {
+                sum += i;
             }
-            System.out.println("Work done "+Thread.currentThread().getName());
+            System.out.println(sum);
+            System.out.println("Work completed on thread: "+Thread.currentThread().getName());
         };
-        for(int i = 0; i < 1; i++) {
-            customThreadPool.submit(runnable);
-            System.out.println("Submitted "+Thread.currentThread().getName());
+        for(int i = 0; i < 5; i++) {
+            customThreadPool.submit(work);
+            System.out.println("Submitted work from "+Thread.currentThread().getName());
         }
-        System.out.println("Completed");
-        Thread.sleep(2000);
+        Thread.sleep(20000);
         customThreadPool.shutDown();
     }
 
