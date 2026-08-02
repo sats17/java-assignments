@@ -64,7 +64,4 @@ public class CustomThreadPool {
         Thread.sleep(20000);
         customThreadPool.shutDown();
     }
-
-
-
 }
