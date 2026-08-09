@@ -36,11 +36,11 @@ public class CustomThreadPool {
         }
     }
 
-    public void execute(Runnable runnable) {
+    public void execute(Runnable runnable) throws InterruptedException {
         if(shutDownAsked) {
             throw new IllegalStateException("Cannot accept new tasks as shutdown being asked.");
         }
-        tasks.add(runnable);
+        tasks.put(runnable);
     }
     
     public void shutDown() {
