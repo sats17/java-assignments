@@ -21,8 +21,9 @@ public class ThreadUsingClass extends Thread {
 		System.out.println("Thread tutorial started");
 		System.out.println("Current running thread from main() method is "+Thread.currentThread().getName());
 		ThreadUsingClass threadClass = new ThreadUsingClass();
-		threadClass.run();
+		threadClass.run(); // Calling run method here to prove that this will run on main thread.
 		threadClass.start();
+		System.out.println(Thread.currentThread().getState());
 	}
 	
 }
