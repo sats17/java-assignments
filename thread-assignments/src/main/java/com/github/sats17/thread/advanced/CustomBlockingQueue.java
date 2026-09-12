@@ -8,9 +8,7 @@ public class CustomBlockingQueue<E> {
     private int putIndex = 0;
     private int takeIndex = 0;
 
-    private Thread waitingThread;
 
-    // Implement this with circular array with putIndex and takeIndex
     CustomBlockingQueue(int size) {
         arr = new Object[size];
     }
@@ -31,6 +29,7 @@ public class CustomBlockingQueue<E> {
     }
 
     public synchronized void putWait(E data) throws Exception {
+        System.out.println(STR."Putting data \{data}");
         int newPutIndex = putIndex + 1;
         if(newPutIndex > arr.length) {
             if(arr[0] == null) {
@@ -38,10 +37,8 @@ public class CustomBlockingQueue<E> {
                 arr[putIndex] = data;
             } else {
                 System.out.println("Queue is full, waiting");
-                waitingThread = Thread.currentThread();
-                Thread.currentThread().wait();
+                wait();
                 System.out.println("Wait complete");
-                waitingThread = null;
                 putWait(data);
             }
         } else {
@@ -50,7 +47,8 @@ public class CustomBlockingQueue<E> {
         }
     }
 
-    public E take() {
+    public synchronized E take() {
+        System.out.println("Taking value");
         E data = (E) arr[takeIndex];
         if(data == null) {
             System.out.println("Nothing to pull");
@@ -58,15 +56,13 @@ public class CustomBlockingQueue<E> {
         } else {
             arr[takeIndex] = null;
         }
-        if((takeIndex + 1) >= arr.length) {
+        if((takeIndex + 1) > arr.length) {
             takeIndex = 0;
         } else {
             takeIndex = takeIndex + 1;
         }
 
-        if(waitingThread != null) {
-            waitingThread.notify();
-        }
+        notify();
         return data;
     }
 
@@ -87,13 +83,12 @@ public class CustomBlockingQueue<E> {
         return data;
     }
 
-
     public void printQueue() {
         StringBuilder output = new StringBuilder();
         output.append("[");
         for(int i = 0; i < arr.length; i++) {
             if(arr[i] == null) {
-                output.append("-");
+                output.append("NULL");
             } else {
                 output.append(arr[i]);
             }
@@ -109,6 +104,7 @@ public class CustomBlockingQueue<E> {
         CustomBlockingQueue<Integer> queue = new CustomBlockingQueue<>(2);
         queue.put(1);
         queue.put(2);
+        queue.printQueue();
         Thread a = new Thread(() -> {
             try {
                 queue.putWait(3);
@@ -117,11 +113,25 @@ public class CustomBlockingQueue<E> {
             }
         });
         a.start();
-        // Fix this
+        Thread b = new Thread(() -> {
+            try {
+                queue.putWait(4);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        b.start();
+        System.out.println("From main thread");
         Thread.sleep(1000);
         queue.take();
         Thread.sleep(1000);
         queue.printQueue();
+        System.out.println(queue.take());
+        Thread.sleep(2000);
+        queue.printQueue();
+
+        // Fix why 4 insert before 3 (Because of JVM behaviour). Also fix why last printQueue prints (4, NULL)
+        // instead of (3, 4)
     }
 
 
