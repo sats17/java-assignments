@@ -1,27 +1,41 @@
 package com.github.sats17.thread.advanced;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-class CustomBlockingQueueTest {
+public class CustomBlockingQueueTest {
 
-    @Test
-    void shouldPutAndTakeSingleElement() throws Exception {
+    public static void main(String[] args) throws Exception {
+
+        shouldPutAndTakeSingleElement();
+        shouldMaintainFifoOrder();
+        takeFromEmptyQueueShouldReturnNull();
+        shouldReuseSpaceAfterTakingElement();
+        shouldHandleCircularWrapAround();
+        producerShouldWaitWhenQueueIsFull();
+        multipleProducersShouldEventuallyInsertAllValues();
+        producerShouldNotLoseValueAfterWaiting();
+        multiplePutTakeCyclesShouldWork();
+
+        System.out.println("ALL TESTS PASSED");
+    }
+
+
+    static void shouldPutAndTakeSingleElement() throws Exception {
+
         CustomBlockingQueue<Integer> queue =
                 new CustomBlockingQueue<>(2);
 
         queue.put(10);
 
-        assertEquals(10, queue.take());
+        assert queue.take() == 10 :
+                "Expected 10";
     }
 
 
-    @Test
-    void shouldMaintainFifoOrder() throws Exception {
+    static void shouldMaintainFifoOrder() throws Exception {
+
         CustomBlockingQueue<Integer> queue =
                 new CustomBlockingQueue<>(3);
 
@@ -29,61 +43,28 @@ class CustomBlockingQueueTest {
         queue.put(2);
         queue.put(3);
 
-        assertEquals(1, queue.take());
-        assertEquals(2, queue.take());
-        assertEquals(3, queue.take());
+        assert queue.take() == 1 :
+                "Expected 1";
+
+        assert queue.take() == 2 :
+                "Expected 2";
+
+        assert queue.take() == 3 :
+                "Expected 3";
     }
 
 
-    @Test
-    void takeFromEmptyQueueShouldReturnNull() {
+    static void takeFromEmptyQueueShouldReturnNull() {
+
         CustomBlockingQueue<Integer> queue =
                 new CustomBlockingQueue<>(2);
 
-        assertNull(queue.take());
+        assert queue.take() == null :
+                "Expected null from empty queue";
     }
 
 
-    @Test
-    void shouldReuseSpaceAfterTakingElement() {
-        CustomBlockingQueue<Integer> queue =
-                new CustomBlockingQueue<>(2);
-
-        queue.put(1);
-        queue.put(2);
-
-        assertEquals(1, queue.take());
-
-        queue.put(3);
-
-        assertEquals(2, queue.take());
-        assertEquals(3, queue.take());
-    }
-
-
-    @Test
-    void shouldHandleCircularWrapAround() {
-        CustomBlockingQueue<Integer> queue =
-                new CustomBlockingQueue<>(3);
-
-        queue.put(1);
-        queue.put(2);
-        queue.put(3);
-
-        assertEquals(1, queue.take());
-        assertEquals(2, queue.take());
-
-        queue.put(4);
-        queue.put(5);
-
-        assertEquals(3, queue.take());
-        assertEquals(4, queue.take());
-        assertEquals(5, queue.take());
-    }
-
-
-    @Test
-    void producerShouldWaitWhenQueueIsFull()
+    static void shouldReuseSpaceAfterTakingElement()
             throws Exception {
 
         CustomBlockingQueue<Integer> queue =
@@ -92,8 +73,63 @@ class CustomBlockingQueueTest {
         queue.put(1);
         queue.put(2);
 
-        CountDownLatch producerStarted = new CountDownLatch(1);
-        CountDownLatch producerFinished = new CountDownLatch(1);
+        assert queue.take() == 1 :
+                "Expected 1";
+
+        queue.put(3);
+
+        assert queue.take() == 2 :
+                "Expected 2";
+
+        assert queue.take() == 3 :
+                "Expected 3";
+    }
+
+
+    static void shouldHandleCircularWrapAround()
+            throws Exception {
+
+        CustomBlockingQueue<Integer> queue =
+                new CustomBlockingQueue<>(3);
+
+        queue.put(1);
+        queue.put(2);
+        queue.put(3);
+
+        assert queue.take() == 1 :
+                "Expected 1";
+
+        assert queue.take() == 2 :
+                "Expected 2";
+
+        queue.put(4);
+        queue.put(5);
+
+        assert queue.take() == 3 :
+                "Expected 3";
+
+        assert queue.take() == 4 :
+                "Expected 4";
+
+        assert queue.take() == 5 :
+                "Expected 5";
+    }
+
+
+    static void producerShouldWaitWhenQueueIsFull()
+            throws Exception {
+
+        CustomBlockingQueue<Integer> queue =
+                new CustomBlockingQueue<>(2);
+
+        queue.put(1);
+        queue.put(2);
+
+        CountDownLatch producerStarted =
+                new CountDownLatch(1);
+
+        CountDownLatch producerFinished =
+                new CountDownLatch(1);
 
         Thread producer = new Thread(() -> {
             try {
@@ -102,6 +138,7 @@ class CustomBlockingQueueTest {
                 queue.putWait(3);
 
                 producerFinished.countDown();
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -110,38 +147,43 @@ class CustomBlockingQueueTest {
         producer.start();
 
         // Make sure producer actually started.
-        assertTrue(
-                producerStarted.await(1, TimeUnit.SECONDS)
-        );
+        assert producerStarted.await(1, TimeUnit.SECONDS) :
+                "Producer did not start";
 
-        // Producer should still be blocked because queue is full.
-        assertFalse(
-                producerFinished.await(200, TimeUnit.MILLISECONDS)
-        );
+        // Producer should still be blocked.
+        assert !producerFinished.await(
+                200,
+                TimeUnit.MILLISECONDS
+        ) : "Producer should be waiting";
 
         // Free one slot.
-        assertEquals(1, queue.take());
+        assert queue.take() == 1 :
+                "Expected 1";
 
         // Producer should now finish.
-        assertTrue(
-                producerFinished.await(1, TimeUnit.SECONDS)
-        );
+        assert producerFinished.await(
+                1,
+                TimeUnit.SECONDS
+        ) : "Producer did not finish after queue was freed";
 
-        assertEquals(2, queue.take());
-        assertEquals(3, queue.take());
+        assert queue.take() == 2 :
+                "Expected 2";
+
+        assert queue.take() == 3 :
+                "Expected 3";
 
         producer.join();
     }
 
 
-    @Test
-    void multipleProducersShouldEventuallyInsertAllValues()
+    static void multipleProducersShouldEventuallyInsertAllValues()
             throws Exception {
 
         CustomBlockingQueue<Integer> queue =
                 new CustomBlockingQueue<>(2);
 
-        CountDownLatch startLatch = new CountDownLatch(1);
+        CountDownLatch startLatch =
+                new CountDownLatch(1);
 
         Thread producer1 = new Thread(() -> {
             try {
@@ -176,35 +218,40 @@ class CustomBlockingQueueTest {
 
         startLatch.countDown();
 
-        // Allow producers to start.
         Thread.sleep(200);
 
-        // Keep consuming until all producers have inserted.
         Integer first = queue.take();
         Integer second = queue.take();
 
-        assertNotNull(first);
-        assertNotNull(second);
+        assert first != null :
+                "First value should not be null";
 
-        // Give waiting producer an opportunity to insert.
+        assert second != null :
+                "Second value should not be null";
+
         Thread.sleep(200);
 
         Integer third = queue.take();
 
-        assertNotNull(third);
+        assert third != null :
+                "Third value should not be null";
 
         producer1.join(1000);
         producer2.join(1000);
         producer3.join(1000);
 
-        assertFalse(producer1.isAlive());
-        assertFalse(producer2.isAlive());
-        assertFalse(producer3.isAlive());
+        assert !producer1.isAlive() :
+                "Producer 1 is still alive";
+
+        assert !producer2.isAlive() :
+                "Producer 2 is still alive";
+
+        assert !producer3.isAlive() :
+                "Producer 3 is still alive";
     }
 
 
-    @Test
-    void producerShouldNotLoseValueAfterWaiting()
+    static void producerShouldNotLoseValueAfterWaiting()
             throws Exception {
 
         CustomBlockingQueue<Integer> queue =
@@ -222,31 +269,34 @@ class CustomBlockingQueueTest {
 
         producer.start();
 
-        // Producer should be waiting.
+        // Give producer time to enter wait().
         Thread.sleep(200);
 
-        // Remove the existing item.
-        assertEquals(100, queue.take());
+        assert queue.take() == 100 :
+                "Expected 100";
 
         producer.join(1000);
 
-        assertFalse(producer.isAlive());
+        assert !producer.isAlive() :
+                "Producer is still waiting";
 
-        assertEquals(200, queue.take());
+        assert queue.take() == 200 :
+                "Expected 200";
     }
 
 
-    @Test
-    void multiplePutTakeCyclesShouldWork()
+    static void multiplePutTakeCyclesShouldWork()
             throws Exception {
 
         CustomBlockingQueue<Integer> queue =
                 new CustomBlockingQueue<>(3);
 
         for (int i = 1; i <= 100; i++) {
+
             queue.putWait(i);
 
-            assertEquals(i, queue.take());
+            assert queue.take() == i :
+                    "Expected " + i;
         }
     }
 }
