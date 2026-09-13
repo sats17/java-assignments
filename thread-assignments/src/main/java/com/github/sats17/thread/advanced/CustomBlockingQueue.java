@@ -54,23 +54,6 @@ public class CustomBlockingQueue<E> {
         return data;
     }
 
-    public E takeWait() throws Exception {
-        E data = (E) arr[takeIndex];
-        if(data == null) {
-            System.out.println("Nothing to pull");
-            return null;
-        } else {
-            arr[takeIndex] = null;
-        }
-        if((takeIndex + 1) >= arr.length) {
-            takeIndex = 0;
-        } else {
-            takeIndex = takeIndex + 1;
-        }
-
-        return data;
-    }
-
     public void printQueue() {
         StringBuilder output = new StringBuilder();
         output.append("[");

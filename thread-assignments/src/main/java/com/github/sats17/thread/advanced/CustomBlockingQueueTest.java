@@ -8,11 +8,12 @@ public class CustomBlockingQueueTest {
 
     public static void main(String[] args) throws Exception {
 
-//        shouldPutAndTakeSingleElement();
-//        shouldMaintainFifoOrder();
-//        takeFromEmptyQueueShouldReturnNull();
-//        shouldReuseSpaceAfterTakingElement();
-//        shouldHandleCircularWrapAround();
+        // Note: add "-ea" in VM options to enable assertions
+        shouldPutAndTakeSingleElement();
+        shouldMaintainFifoOrder();
+        takeFromEmptyQueueShouldReturnNull();
+        shouldReuseSpaceAfterTakingElement();
+        shouldHandleCircularWrapAround();
         producerShouldWaitWhenQueueIsFull();
 //        multipleProducersShouldEventuallyInsertAllValues();
 //        producerShouldNotLoseValueAfterWaiting();
@@ -132,6 +133,7 @@ public class CustomBlockingQueueTest {
                 producerStarted.countDown();
 
                 queue.putWait(3);
+                System.out.println("After calling putWait");
 
                 producerFinished.countDown();
 
@@ -143,32 +145,28 @@ public class CustomBlockingQueueTest {
         producer.start();
         System.out.println("Starting");
 
-        // Make sure producer actually started.
-        assert producerStarted.await(1, TimeUnit.SECONDS) :
-                "Producer did not start";
+        boolean started = producerStarted.await(1, TimeUnit.SECONDS);
 
-        // Producer should still be blocked.
-        assert !producerFinished.await(
-                5,
-                TimeUnit.SECONDS
-        ) : "Producer should be waiting";
+        if (!started) {
+            throw new RuntimeException("Producer did not start");
+        }
 
+        boolean finished = producerFinished.await(200, TimeUnit.MILLISECONDS);
+
+        if (finished) {
+            throw new RuntimeException("Producer should be waiting");
+        }
         System.out.println("taking");
         // Free one slot.
-        assert queue.take() == 1 :
-                "Expected 1";
+        int first = queue.take();
 
         // Producer should now finish.
-        assert producerFinished.await(
-                1,
-                TimeUnit.SECONDS
-        ) : "Producer did not finish after queue was freed";
+        assert producerFinished.await(1, TimeUnit.SECONDS) : "Producer did not finish after queue was freed";
 
-        assert queue.take() == 2 :
-                "Expected 2";
-
-        assert queue.take() == 3 :
-                "Expected 3";
+        // Pulling all remaining elements from queue to perform assertions
+        int second = queue.take();
+        int third = queue.take();
+        assert first == 1 && second == 2 && third == 3;
 
         producer.join();
     }
