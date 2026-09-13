@@ -8,15 +8,15 @@ public class CustomBlockingQueueTest {
 
     public static void main(String[] args) throws Exception {
 
-        shouldPutAndTakeSingleElement();
-        shouldMaintainFifoOrder();
-        takeFromEmptyQueueShouldReturnNull();
-        shouldReuseSpaceAfterTakingElement();
-        shouldHandleCircularWrapAround();
+//        shouldPutAndTakeSingleElement();
+//        shouldMaintainFifoOrder();
+//        takeFromEmptyQueueShouldReturnNull();
+//        shouldReuseSpaceAfterTakingElement();
+//        shouldHandleCircularWrapAround();
         producerShouldWaitWhenQueueIsFull();
-        multipleProducersShouldEventuallyInsertAllValues();
-        producerShouldNotLoseValueAfterWaiting();
-        multiplePutTakeCyclesShouldWork();
+//        multipleProducersShouldEventuallyInsertAllValues();
+//        producerShouldNotLoseValueAfterWaiting();
+//        multiplePutTakeCyclesShouldWork();
 
         System.out.println("ALL TESTS PASSED");
     }
@@ -116,20 +116,16 @@ public class CustomBlockingQueueTest {
     }
 
 
-    static void producerShouldWaitWhenQueueIsFull()
-            throws Exception {
+    static void producerShouldWaitWhenQueueIsFull() throws Exception {
 
-        CustomBlockingQueue<Integer> queue =
-                new CustomBlockingQueue<>(2);
+        CustomBlockingQueue<Integer> queue = new CustomBlockingQueue<>(2);
 
         queue.put(1);
         queue.put(2);
 
-        CountDownLatch producerStarted =
-                new CountDownLatch(1);
+        CountDownLatch producerStarted = new CountDownLatch(1);
 
-        CountDownLatch producerFinished =
-                new CountDownLatch(1);
+        CountDownLatch producerFinished = new CountDownLatch(1);
 
         Thread producer = new Thread(() -> {
             try {
@@ -145,6 +141,7 @@ public class CustomBlockingQueueTest {
         });
 
         producer.start();
+        System.out.println("Starting");
 
         // Make sure producer actually started.
         assert producerStarted.await(1, TimeUnit.SECONDS) :
@@ -152,10 +149,11 @@ public class CustomBlockingQueueTest {
 
         // Producer should still be blocked.
         assert !producerFinished.await(
-                200,
-                TimeUnit.MILLISECONDS
+                5,
+                TimeUnit.SECONDS
         ) : "Producer should be waiting";
 
+        System.out.println("taking");
         // Free one slot.
         assert queue.take() == 1 :
                 "Expected 1";

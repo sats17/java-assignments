@@ -14,37 +14,30 @@ public class CustomBlockingQueue<E> {
     }
 
     public void put(E data) {
-        int newPutIndex = putIndex + 1;
-        if(newPutIndex > arr.length) {
-            if(arr[0] == null) {
-                putIndex = 0;
-                arr[putIndex] = data;
-            } else {
-                System.out.println("Queue is full");
-            }
-        } else {
-            arr[putIndex] = data;
-            putIndex = newPutIndex;
+        if(isQueueFull(putIndex)) {
+            System.out.println("Queue is full");
+            return;
         }
+        arr[putIndex] = data;
+        putIndex = nextIndex(putIndex);
     }
 
     public synchronized void putWait(E data) throws Exception {
-        System.out.println(STR."Putting data \{data}");
-        int newPutIndex = putIndex + 1;
-        if(newPutIndex > arr.length) {
-            if(arr[0] == null) {
-                putIndex = 0;
-                arr[putIndex] = data;
-            } else {
-                System.out.println("Queue is full, waiting");
-                wait();
-                System.out.println("Wait complete");
-                putWait(data);
-            }
-        } else {
-            arr[putIndex] = data;
-            putIndex = newPutIndex;
+        while(isQueueFull(putIndex)) {
+            System.out.println("Queue is full, waiting");
+            wait();
+            System.out.println("Wait complete");
         }
+        arr[putIndex] = data;
+        putIndex = nextIndex(putIndex);
+    }
+
+    private boolean isQueueFull(int index) {
+        return arr[index] != null;
+    }
+
+    private int nextIndex(int index) {
+        return index + 1 >= arr.length ? 0 : index + 1;
     }
 
     public synchronized E take() {
@@ -56,12 +49,7 @@ public class CustomBlockingQueue<E> {
         } else {
             arr[takeIndex] = null;
         }
-        if((takeIndex + 1) > arr.length) {
-            takeIndex = 0;
-        } else {
-            takeIndex = takeIndex + 1;
-        }
-
+        takeIndex = nextIndex(takeIndex);
         notify();
         return data;
     }
@@ -104,6 +92,7 @@ public class CustomBlockingQueue<E> {
         CustomBlockingQueue<Integer> queue = new CustomBlockingQueue<>(2);
         queue.put(1);
         queue.put(2);
+        queue.put(3);
         queue.printQueue();
         Thread a = new Thread(() -> {
             try {
