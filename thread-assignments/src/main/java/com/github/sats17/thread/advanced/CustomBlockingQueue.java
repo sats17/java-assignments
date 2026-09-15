@@ -1,7 +1,5 @@
 package com.github.sats17.thread.advanced;
 
-import java.util.LinkedList;
-
 public class CustomBlockingQueue<E> {
 
     Object[] arr;
@@ -13,7 +11,7 @@ public class CustomBlockingQueue<E> {
         arr = new Object[size];
     }
 
-    public void put(E data) {
+    public void offer(E data) {
         if(isQueueFull(putIndex)) {
             System.out.println("Queue is full");
             return;
@@ -22,7 +20,7 @@ public class CustomBlockingQueue<E> {
         putIndex = nextIndex(putIndex);
     }
 
-    public synchronized void putWait(E data) throws Exception {
+    public synchronized void put(E data) throws Exception {
         while(isQueueFull(putIndex)) {
             System.out.println("Queue is full, waiting");
             wait();
@@ -73,13 +71,13 @@ public class CustomBlockingQueue<E> {
 
     static void main() throws InterruptedException {
         CustomBlockingQueue<Integer> queue = new CustomBlockingQueue<>(2);
-        queue.put(1);
-        queue.put(2);
-        queue.put(3);
+        queue.offer(1);
+        queue.offer(2);
+        queue.offer(3);
         queue.printQueue();
         Thread a = new Thread(() -> {
             try {
-                queue.putWait(3);
+                queue.put(3);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -87,7 +85,7 @@ public class CustomBlockingQueue<E> {
         a.start();
         Thread b = new Thread(() -> {
             try {
-                queue.putWait(4);
+                queue.put(4);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

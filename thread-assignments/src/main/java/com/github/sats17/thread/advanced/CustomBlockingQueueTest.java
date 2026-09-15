@@ -28,7 +28,7 @@ public class CustomBlockingQueueTest {
         CustomBlockingQueue<Integer> queue =
                 new CustomBlockingQueue<>(2);
 
-        queue.put(10);
+        queue.offer(10);
 
         assert queue.take() == 10 :
                 "Expected 10";
@@ -40,9 +40,9 @@ public class CustomBlockingQueueTest {
         CustomBlockingQueue<Integer> queue =
                 new CustomBlockingQueue<>(3);
 
-        queue.put(1);
-        queue.put(2);
-        queue.put(3);
+        queue.offer(1);
+        queue.offer(2);
+        queue.offer(3);
 
         assert queue.take() == 1 :
                 "Expected 1";
@@ -71,13 +71,13 @@ public class CustomBlockingQueueTest {
         CustomBlockingQueue<Integer> queue =
                 new CustomBlockingQueue<>(2);
 
-        queue.put(1);
-        queue.put(2);
+        queue.offer(1);
+        queue.offer(2);
 
         assert queue.take() == 1 :
                 "Expected 1";
 
-        queue.put(3);
+        queue.offer(3);
 
         assert queue.take() == 2 :
                 "Expected 2";
@@ -93,9 +93,9 @@ public class CustomBlockingQueueTest {
         CustomBlockingQueue<Integer> queue =
                 new CustomBlockingQueue<>(3);
 
-        queue.put(1);
-        queue.put(2);
-        queue.put(3);
+        queue.offer(1);
+        queue.offer(2);
+        queue.offer(3);
 
         assert queue.take() == 1 :
                 "Expected 1";
@@ -103,8 +103,8 @@ public class CustomBlockingQueueTest {
         assert queue.take() == 2 :
                 "Expected 2";
 
-        queue.put(4);
-        queue.put(5);
+        queue.offer(4);
+        queue.offer(5);
 
         assert queue.take() == 3 :
                 "Expected 3";
@@ -121,8 +121,8 @@ public class CustomBlockingQueueTest {
 
         CustomBlockingQueue<Integer> queue = new CustomBlockingQueue<>(2);
 
-        queue.put(1);
-        queue.put(2);
+        queue.offer(1);
+        queue.offer(2);
 
         CountDownLatch producerStarted = new CountDownLatch(1);
 
@@ -132,7 +132,7 @@ public class CustomBlockingQueueTest {
             try {
                 producerStarted.countDown();
 
-                queue.putWait(3);
+                queue.put(3);
                 System.out.println("After calling putWait");
 
                 producerFinished.countDown();
@@ -184,7 +184,7 @@ public class CustomBlockingQueueTest {
         Thread producer1 = new Thread(() -> {
             try {
                 startLatch.await();
-                queue.putWait(1);
+                queue.put(1);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -193,7 +193,7 @@ public class CustomBlockingQueueTest {
         Thread producer2 = new Thread(() -> {
             try {
                 startLatch.await();
-                queue.putWait(2);
+                queue.put(2);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -202,7 +202,7 @@ public class CustomBlockingQueueTest {
         Thread producer3 = new Thread(() -> {
             try {
                 startLatch.await();
-                queue.putWait(3);
+                queue.put(3);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -253,11 +253,11 @@ public class CustomBlockingQueueTest {
         CustomBlockingQueue<Integer> queue =
                 new CustomBlockingQueue<>(1);
 
-        queue.put(100);
+        queue.offer(100);
 
         Thread producer = new Thread(() -> {
             try {
-                queue.putWait(200);
+                queue.put(200);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -289,7 +289,7 @@ public class CustomBlockingQueueTest {
 
         for (int i = 1; i <= 100; i++) {
 
-            queue.putWait(i);
+            queue.put(i);
 
             assert queue.take() == i :
                     "Expected " + i;
