@@ -100,8 +100,7 @@ public class CustomBlockingQueue<E> {
         Thread.sleep(2000);
         queue.printQueue();
 
-        // Fix why 4 insert before 3 (Because of JVM behaviour). Also fix why last printQueue prints (4, NULL)
-        // instead of (3, 4)
+        // Implement queue with maintain order when multiple threads are waiting
     }
 
 
