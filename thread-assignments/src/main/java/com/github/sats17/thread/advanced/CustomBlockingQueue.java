@@ -20,7 +20,7 @@ public class CustomBlockingQueue<E> {
         putIndex = nextIndex(putIndex);
     }
 
-    public synchronized void put(E data) throws Exception {
+    public void put(E data) throws Exception {
         while(isQueueFull(putIndex)) {
             System.out.println("Queue is full, waiting");
             wait();
